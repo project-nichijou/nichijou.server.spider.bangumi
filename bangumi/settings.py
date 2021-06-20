@@ -62,9 +62,9 @@ ROBOTSTXT_OBEY = False # Because we need to crawl the mirror sites (they are usi
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'bangumi.pipelines.BangumiPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'bangumi.pipelines.BangumiPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
