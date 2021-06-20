@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = 'bangumi.spiders'
 #USER_AGENT = 'bangumi (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False # Because we need to crawl the mirror sites (they are using robot.txt to block search engines)
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
