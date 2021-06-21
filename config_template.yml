@@ -1,0 +1,6 @@
+database:
+  host: 127.0.0.1
+  user: your_user
+  password: your_password
+  port: 3306
+  database: bangumi
