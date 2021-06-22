@@ -1,6 +1,8 @@
 import mysql.connector
 import copy
 
+from mysql.connector import cursor
+
 class BangumiDatabase(object):
 	
 	def __init__(self, config):
@@ -37,7 +39,7 @@ class BangumiDatabase(object):
 			'	`cn_name`	VARCHAR(200) NOT NULL,'
 			'	`introHTML`	LONGTEXT,'
 			'	`episode`	INT,'
-			'	`start`		VARCHAR(100),'
+			'	`start`		DATE,'
 			'	`attrHTML`	LONGTEXT,'
 			'	PRIMARY KEY ( `sid` ),'
 			'	UNIQUE KEY ( `sid` )'
@@ -57,6 +59,14 @@ class BangumiDatabase(object):
 			'	UNIQUE KEY ( `eid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
+		cursor.execute(
+			'CREATE TABLE IF NOT EXISTS `request_failed` ('
+			'	`id`		INT UNSIGNED NOT NULL,'
+			'	`type`		VARCHAR(20) NOT NULL,'
+			'	PRIMARY KEY ( `id` ),'
+			'	UNIQUE KEY ( `id` )'
+			') ENGINE=InnoDB CHARSET=utf8'
+		)
 		cursor.close()
 
 	def write(self, table: str, values: dict):
@@ -73,6 +83,37 @@ class BangumiDatabase(object):
 		cursor.execute(command, values)
 
 		self.database.commit()
+		cursor.close()
+	
+	def read_sid_list(self, type: str):
+		cursor = self.database.cursor()
+
+		query = f'SELECT `sid` FROM bangumi_id WHERE `type` = {repr(type)}'
+		cursor.execute(query)
+		
+		res = []
+		for sid in cursor:
+			res.append(sid[0])
+		cursor.close()
+		return res
+
+	def read_fail_list(self, type: str):
+		cursor = self.database.cursor()
+
+		query = f'SELECT `id` FROM request_failed WHERE `type` = {repr(type)}'
+		cursor.execute(query)
+		
+		res = []
+		for id in cursor:
+			res.append(id[0])
+		cursor.close()
+		return res
+
+	def del_fail(self, type: str, id: int):
+		cursor = self.database.cursor()
+
+		delete = f'DELETE FROM request_failed WHERE `type` = {repr(type)} AND `id` = {repr(id)}'
+
 		cursor.close()
 
 	def close(self):

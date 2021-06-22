@@ -5,6 +5,7 @@
 
 
 # useful for handling different item types with a single interface
+from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi import bangumi_settings
 from bangumi.items.bangumi_anime_episode_intro import BangumiAnimeEpisodeIntroItem
 from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
@@ -23,21 +24,35 @@ class BangumiPipeline:
 
 	def process_item(self, item, spider):
 		# define table
+		type = 'fail'
 		if isinstance(item, BangumiIDItem):
 			table = 'bangumi_id'
+			type = 'id'
+			id = item['sid']
 		if isinstance(item, BangumiAnimeItem):
 			table = 'bangumi_anime'
+			type = 'anime'
+			id = item['sid']
 		if isinstance(item, BangumiAnimeEpisodeItem):
 			table = 'bangumi_anime_episode'
+			type = 'episode'
+			id = item['eid']
 		if isinstance(item, BangumiAnimeEpisodeIntroItem):
 			table = 'bangumi_anime_episode'
+			type = 'episode_intro'
+			id = item['eid']
+		if isinstance(item, BangumiAnimeFailItem):
+			table = 'request_failed'
 		# adjust links
 		values = dict(item)
 		for key in values.keys():
-			if str(key).endswith('HTML'):
+			if str(key).endswith('HTML') and values[key] != None:
 				values[key] = BangumiPipeline.convert_to_absoulte(values[key])
 		# write section
 		self.save_to_database(table, values)
+		# delete fail if exist
+		if not type == 'fail':
+			self.database.del_fail(type=type, id=id)
 		return item
 
 	def convert_to_absoulte(html: str):
@@ -48,6 +63,5 @@ class BangumiPipeline:
 				link.attrs['href'] = f'{bangumi_settings.ORIGIN_URL}{link.attrs["href"]}'
 		return str(soup)
 
-	
 	def save_to_database(self, table: str, values: dict):
 		self.database.write(table, values)
