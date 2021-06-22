@@ -28,7 +28,7 @@ class BangumiListSpider(scrapy.Spider):
 		# if not empty, yeild results
 		for item in item_list:
 			result = BangumiIDItem()
-			result['id'] = item.attrib['id'][5:] # get rid of the prefix `item_`
+			result['sid'] = item.attrib['id'][5:] # get rid of the prefix `item_`
 			result['type'] = self.type
 			result['cn_name'] = item.xpath('./div/h3/a/text()').get()
 			result['name'] = item.xpath('./div/h3/small[@class="grey"]/text()').get()
