@@ -35,3 +35,11 @@ if SPIDER_MODE == SpiderMode.ORIGIN:
 if SPIDER_MODE == SpiderMode.MIRROR:
 	BASE_DOMAIN = MIRROR_DOMAIN
 	BASE_URL = f'{SPIDER_PROTOCOL.value}{MIRROR_DOMAIN}'
+
+COOKIES = {}
+
+HEADERS = {
+	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48'
+}
+
+START_INFO = ['放送开始', '上映年度', '开始']

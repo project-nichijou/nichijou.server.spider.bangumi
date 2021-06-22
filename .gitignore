@@ -1,6 +1,7 @@
 # custom
 .vscode/
 database_settings.py
+bangumi_settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
