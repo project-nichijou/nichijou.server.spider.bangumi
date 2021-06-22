@@ -48,3 +48,9 @@ scarpy crawl <spider_name> -a <arg1>=<val1> <arg2>=<val2> ...
 ```
 scrapy crawl bangumi_anime -a fail=off
 ```
+
+## 关于数据库
+
+更多的数据库日后~~可能~~会进行支持，如果有兴趣可以提交PR，持续关注。
+
+此外，当前的默认数据库名称为`bangumi`，本工具会自动新建数据库以及数据表 (若不存在) 。如果和本地数据库名称有冲突，可以在`bangumi/database/database_settings.py`中修改。
