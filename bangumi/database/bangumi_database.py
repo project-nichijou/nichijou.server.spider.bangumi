@@ -26,7 +26,8 @@ class BangumiDatabase(object):
 			'	`type`		VARCHAR(10) NOT NULL,'
 			'	`name`		VARCHAR(200) NOT NULL,'
 			'	`cn_name`	VARCHAR(200) NOT NULL,'
-			'	PRIMARY KEY ( `sid` )'
+			'	PRIMARY KEY ( `sid` ),'
+			'	UNIQUE KEY ( `sid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
 		cursor.execute(
@@ -38,7 +39,8 @@ class BangumiDatabase(object):
 			'	`episode`	INT,'
 			'	`start`		VARCHAR(100),'
 			'	`moreHTML`	LONGTEXT,'
-			'	PRIMARY KEY ( `sid` )'
+			'	PRIMARY KEY ( `sid` ),'
+			'	UNIQUE KEY ( `sid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
 		cursor.execute(
@@ -51,9 +53,26 @@ class BangumiDatabase(object):
 			'	`count`		INT UNSIGNED NOT NULL,'
 			'	`order`		INT UNSIGNED NOT NULL,'
 			'	`introHTML`	LONGTEXT,'
-			'	PRIMARY KEY ( `eid` )'
+			'	PRIMARY KEY ( `eid` ),'
+			'	UNIQUE KEY ( `eid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
+		cursor.close()
+
+	def write(self, table: str, values: dict):
+		keys = values.keys()
+		
+		cmd_line_table = f'INSERT INTO {table} '
+		cmd_line_keys = f'({", ".join(key for key in keys)}) '
+		cmd_line_values = f'VALUES ({", ".join(f"%({key})s" for key in keys)}) '
+		cmd_line_update = f'ON DUPLICATE KEY UPDATE {", ".join(f"{key} = %({key})s" for key in keys)}'
+		
+		command = '\n'.join([cmd_line_table, cmd_line_keys, cmd_line_values, cmd_line_update])
+
+		cursor = self.database.cursor()
+		cursor.execute(command, values)
+
+		self.database.commit()
 		cursor.close()
 
 	def close(self):
