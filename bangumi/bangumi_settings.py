@@ -21,10 +21,12 @@ SPIDER_MODE = SpiderMode.ORIGIN
 # Protocol of spider, type: SpiderProtocol
 SPIDER_PROTOCOL = SpiderProtocol.HTTPS
 
-# URL of original site
+# DOMAIN of original site
 ORIGIN_DOMAIN = 'bgm.tv'
-# URL of mirror site
+# DOMAIN of mirror site
 MIRROR_DOMAIN = 'mirror.bgm.rincat.ch'
+# URL of original site
+ORIGIN_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_DOMAIN}'
 
 # Define Base URL
 if SPIDER_MODE == SpiderMode.ORIGIN:
