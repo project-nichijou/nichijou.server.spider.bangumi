@@ -38,7 +38,7 @@ class BangumiDatabase(object):
 			'	`introHTML`	LONGTEXT,'
 			'	`episode`	INT,'
 			'	`start`		VARCHAR(100),'
-			'	`moreHTML`	LONGTEXT,'
+			'	`attrHTML`	LONGTEXT,'
 			'	PRIMARY KEY ( `sid` ),'
 			'	UNIQUE KEY ( `sid` )'
 			') ENGINE=InnoDB CHARSET=utf8'

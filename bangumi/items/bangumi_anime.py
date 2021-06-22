@@ -14,5 +14,5 @@ class BangumiAnimeItem(scrapy.Item):
 	episode = scrapy.Field()
 	# 放送开始
 	start = scrapy.Field()
-	# 其他 (HTML)
-	moreHTML = scrapy.Field()
+	# 所有属性列表 (HTML)
+	attrHTML = scrapy.Field()
