@@ -1,6 +1,6 @@
 # custom
 .vscode/
-config.yml
+database_settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
