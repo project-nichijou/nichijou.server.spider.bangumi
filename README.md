@@ -1,19 +1,19 @@
 # 0x00 Bangumi Spider [Project Nichijou]
 
-本项目作为项目`Project Nichijou`中的子项目，是[Bangumi 番组计划](bgm.tv)的爬虫，用于构建番剧数据库。
+本项目作为项目[Project Nichijou](https://github.com/project-nichijou)中的子项目，是[Bangumi 番组计划](bgm.tv)的爬虫，用于构建番剧数据库。完整内容详见: https://github.com/project-nichijou/intro
 
 ## 思路与流程
 
-这个repo会包含两方面的内容：
+本repo只包含：
+- 数据爬取
+- 写入数据库
 
-1. 数据爬取，写入数据库
-2. 全部结束之后导出固定格式的`json`文件`push`到`GitHub`开源，使用`jsDelivr`做全球`CDN`加速
-
-在第一阶段 (即写入数据库的时候) ，如果阅读代码可以发现，我们对于大量难以处理的字段使用了直接写入`HTML`的方式，在第二阶段在进行处理。这样做的原因在于：
+如果阅读代码可以发现，我们对于大量难以处理的字段使用了直接写入`HTML`的方式，会在后续的流程中 (见[项目架构](https://github.com/project-nichijou/intro)) 进行处理。这样做的原因在于：
 
 1. 提高爬虫速度 (毕竟服务器是小水管 1C2G)
 2. 降低在爬取阶段的报错、解析失败、写入失败频率
 3. 有利于提高整体工作的稳定性，方便调试
+4. 降低数据库复杂度，方便维护
 
 ## 关于数据库
 
