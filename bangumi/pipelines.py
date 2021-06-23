@@ -5,6 +5,7 @@
 
 
 # useful for handling different item types with a single interface
+from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi import bangumi_settings
 from bangumi.items.bangumi_anime_episode_intro import BangumiAnimeEpisodeIntroItem
@@ -32,6 +33,10 @@ class BangumiPipeline:
 		if isinstance(item, BangumiAnimeItem):
 			table = 'bangumi_anime'
 			type = 'anime'
+			id = item['sid']
+		if isinstance(item, BangumiAnimeNameItem):
+			table = 'bangumi_anime_name'
+			type = 'anime_name'
 			id = item['sid']
 		if isinstance(item, BangumiAnimeEpisodeItem):
 			table = 'bangumi_anime_episode'

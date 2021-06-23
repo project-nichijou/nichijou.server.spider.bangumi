@@ -1,3 +1,4 @@
+from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi.items.bangumi_anime import BangumiAnimeItem
 from bangumi import bangumi_settings
@@ -46,48 +47,60 @@ class BangumiAnimeSpider(scrapy.Spider):
 		result['attrHTML'] = scrapy.Selector(response=response).xpath('//*[@id="infobox"]').get()
 		# name
 		result['name'] = scrapy.Selector(response=response).xpath('//*[@id="headerSubject"]/h1/a/text()').get()
-		result['cn_name'] = result['name']
-		# introHTML
-		result['introHTML'] = scrapy.Selector(response=response).xpath('//*[@id="subject_summary"]').get()
-		# detailed info
-		for item in scrapy.Selector(response=response).xpath('//*[@id="infobox"]/li'):
-			# [:-2] 去掉末尾的 `: `
-			info_title = item.xpath('./span/text()').extract()[0][:-2]
-			# cn_name
-			if info_title == '中文名':
-				try:
-					result['cn_name'] = item.xpath('./text()').get()
-				except:
-					result['cn_name'] = result['name']
-			# episode
-			if info_title == '话数':
-				try:
-					result['episode'] = int(item.xpath('./text()').get())
-				except:
-					result['episode'] = 0
-			# start date
-			if info_title in bangumi_settings.START_INFO:
-				try:
-					raw = item.xpath('./text()').get()
-					try:
-						tArray = time.strptime(raw, "%Y年%m月%d日")
-						date = time.strftime('%Y-%m-%d', tArray)
-						result['start'] = date
-					except:
-						try:
-							tArray = time.strptime(raw, "%Y-%m-%d")
-							date = time.strftime('%Y-%m-%d', tArray)
-							result['start'] = date
-						except:
-							result['start'] = None
-				except:
-					result['start'] = None
+		# if None then quit
 		if result['name'] == None:
 			fail_res = BangumiAnimeFailItem()
 			fail_res['id'] = result['sid']
 			fail_res['type'] = 'anime'
 			return fail_res
-		return result
+		# set default cn_name
+		result['cn_name'] = result['name']
+		yield BangumiAnimeNameItem(
+			sid = result['sid'],
+			name = result['name']
+		)
+		# introHTML
+		result['introHTML'] = scrapy.Selector(response=response).xpath('//*[@id="subject_summary"]').get()
+		# default episode
+		result['episode'] = 0
+		# detailed info
+		for item in scrapy.Selector(response=response).xpath('//*[@id="infobox"]/li'):
+			# [:-2] 去掉末尾的 `: `
+			info_title = item.xpath('./span/text()').extract()[0][:-2]
+			try: raw = item.xpath('./text()').get()
+			except: continue
+			if raw == None or raw == '': continue
+			# cn_name
+			if info_title == '中文名':
+				result['cn_name'] = raw
+				yield BangumiAnimeNameItem(
+					sid = result['sid'],
+					name = result['cn_name']
+				)
+			# 别名
+			if info_title == '别名':
+				yield BangumiAnimeNameItem(
+					sid = result['sid'],
+					name = raw
+				)
+			# episode
+			if info_title == '话数':
+				try: result['episode'] = int(raw)
+				except: pass
+			# start date
+			if info_title in bangumi_settings.START_INFO:
+				try:
+					tArray = time.strptime(raw, "%Y年%m月%d日")
+					date = time.strftime('%Y-%m-%d', tArray)
+					result['start'] = date
+				except:
+					try:
+						tArray = time.strptime(raw, "%Y-%m-%d")
+						date = time.strftime('%Y-%m-%d', tArray)
+						result['start'] = date
+					except:
+						result['start'] = None
+		yield result
 
 def get_field_value(selector, index=0):
     return selector[index] if len(selector) != 0 else ''

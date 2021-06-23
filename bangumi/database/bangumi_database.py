@@ -46,6 +46,14 @@ class BangumiDatabase(object):
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
 		cursor.execute(
+			'CREATE TABLE IF NOT EXISTS `bangumi_anime_name` ('
+			'	`sid`		INT UNSIGNED NOT NULL,'
+			'	`name`		VARCHAR(200) NOT NULL,'
+			'	PRIMARY KEY ( `name` ),'
+			'	UNIQUE KEY ( `name` )'
+			') ENGINE=InnoDB CHARSET=utf8'
+		)
+		cursor.execute(
 			'CREATE TABLE IF NOT EXISTS `bangumi_anime_episode` ('
 			'	`eid`		INT UNSIGNED NOT NULL,'
 			'	`sid`		INT UNSIGNED NOT NULL,'
