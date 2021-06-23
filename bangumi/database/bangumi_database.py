@@ -113,7 +113,9 @@ class BangumiDatabase(object):
 		cursor = self.database.cursor()
 
 		delete = f'DELETE FROM request_failed WHERE `type` = {repr(type)} AND `id` = {repr(id)}'
+		cursor.execute(delete)
 
+		self.database.commit()
 		cursor.close()
 
 	def close(self):

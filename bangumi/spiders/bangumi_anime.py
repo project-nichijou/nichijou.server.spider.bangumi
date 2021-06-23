@@ -41,7 +41,7 @@ class BangumiAnimeSpider(scrapy.Spider):
 	def parse(self, response):
 		result = BangumiAnimeItem()
 		# sid
-		result['sid'] = str(response.url).split('/')[-1]
+		result['sid'] = int(str(response.url).split('/')[-1])
 		# info HTML <ul id="infobox">
 		result['attrHTML'] = scrapy.Selector(response=response).xpath('//*[@id="infobox"]').get()
 		# name
