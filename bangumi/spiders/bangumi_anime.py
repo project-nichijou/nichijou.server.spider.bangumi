@@ -100,6 +100,14 @@ class BangumiAnimeSpider(scrapy.Spider):
 						result['start'] = date
 					except:
 						result['start'] = None
+		# tags
+		result['tags'] = ' '.join(scrapy.Selector(response=response).xpath('//*[@id="subject_detail"]/div[@class="subject_tag_section"]/div[1]/a/span/text()').getall())
+		# type
+		result['type'] = scrapy.Selector(response=response).xpath('//*[@id="headerSubject"]/h1/small/text()').get()
+		# thumb
+		result['thumb'] = scrapy.Selector(response=response).xpath('//*[@id="bangumiInfo"]/div/div[1]/a/img/@src').get()
+		if str(result['thumb']).startswith('//'):
+			result['thumb'] = f'https:{result["thumb"]}'
 		yield result
 
 def get_field_value(selector, index=0):
