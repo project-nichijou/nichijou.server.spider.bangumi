@@ -12,7 +12,7 @@ class BangumiAnimeSpider(scrapy.Spider):
 	name = 'bangumi_anime'
 	allowed_domains = [bangumi_settings.BASE_DOMAIN]
 
-	def __init__(self, fail='on', *args, **kwargs):
+	def __init__(self, fail='off', *args, **kwargs):
 		super(BangumiAnimeSpider, self).__init__(*args, **kwargs)
 		database = BangumiDatabase(database_settings.CONFIG)
 		sid_list = []
