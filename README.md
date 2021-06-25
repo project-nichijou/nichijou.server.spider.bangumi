@@ -43,7 +43,7 @@
 - MySQL 5.7.4 +
 - Python 3.6 +
 - Scrapy
-- bs4
+- beautifulsoup4
 - Ubuntu (WSL)
 - click (optional, 用于构建CLI)
 
