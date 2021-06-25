@@ -12,7 +12,7 @@ class BangumiAnimeEpisodeItem(scrapy.Item):
 	cn_name = scrapy.Field()
 	# 类型: 本篇 / SP / OP / ED / etc.
 	type = scrapy.Field()
-	# 第几话
-	count = scrapy.Field()
-	# 顺序 (所有剧集中的第几话)
+	# 顺序 (所有剧集中的第几话, 从1开始)
 	order = scrapy.Field()
+	# 是否已放送 状态: Air / NA
+	status = scrapy.Field()

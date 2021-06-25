@@ -63,8 +63,8 @@ class BangumiDatabase(object):
 			'	`name`		VARCHAR(200) NOT NULL,'
 			'	`cn_name`	VARCHAR(200) NOT NULL,'
 			'	`type`		VARCHAR(10) NOT NULL,'
-			'	`count`		INT UNSIGNED NOT NULL,'
 			'	`order`		INT UNSIGNED NOT NULL,'
+			'	`status`	VARCHAR(10) NOT NULL,'
 			'	`introHTML`	LONGTEXT,'
 			'	PRIMARY KEY ( `eid` ),'
 			'	UNIQUE KEY ( `eid` )'
@@ -84,9 +84,9 @@ class BangumiDatabase(object):
 		keys = values.keys()
 		
 		cmd_line_table = f'INSERT INTO {table} '
-		cmd_line_keys = f'({", ".join(key for key in keys)}) '
+		cmd_line_keys = f'({", ".join(f"`{key}`" for key in keys)}) '
 		cmd_line_values = f'VALUES ({", ".join(f"%({key})s" for key in keys)}) '
-		cmd_line_update = f'ON DUPLICATE KEY UPDATE {", ".join(f"{key} = %({key})s" for key in keys)}'
+		cmd_line_update = f'ON DUPLICATE KEY UPDATE {", ".join(f"`{key}` = %({key})s" for key in keys)}'
 		
 		command = '\n'.join([cmd_line_table, cmd_line_keys, cmd_line_values, cmd_line_update])
 
