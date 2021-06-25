@@ -21,12 +21,31 @@
 
 此外，当前的默认数据库名称为`bangumi`，本工具会自动新建数据库以及数据表 (若不存在) 。如果和本地数据库名称有冲突，可以在`bangumi/database/database_settings.py`中修改。
 
+## 关于爬虫
+
+本项目实现了如下Spider:
+
+- `bangumi_anime_list`: 爬取动画列表, `/anime/browser/?sort=title&page=<page>`
+- `bangumi_book_list`: 爬取书籍列表, `/anime/book/?sort=title&page=<page>`
+- `bangumi_game_list`: 爬取游戏列表, `/anime/game/?sort=title&page=<page>`
+- `bangumi_music_list`: 爬取音乐列表, `/anime/music/?sort=title&page=<page>`
+- `bangumi_real_list`: 爬取三次元列表, `/anime/real/?sort=title&page=<page>`
+- `bangumi_anime`: 爬取动画信息, `/subject/<sid>`
+- `bangumi_anime_episode`: 爬取动画剧集信息, `/subject/<sid>/ep`
+- `bangumi_anime_episode_intro`: 爬取动画剧集介绍, `/ep/<eid>`
+
+因为主项目的性质，故主要精力集中在番剧上面，如果您有其他需要可以自行实现 (欢迎提交PR！)
+
+注意：`bangumi_anime_episode_intro`如果全部爬取会**非常**耗时，所以我们提供了`full`参数，默认为`off`只爬取未播放剧集的信息，`on`时爬取全部信息。
+
 ## 环境
 
 - MySQL 5.7.4 +
 - Python 3.6 +
 - Scrapy
+- bs4
 - Ubuntu (WSL)
+- click (optional, 用于构建CLI)
 
 ## 配置方法
 
@@ -48,7 +67,7 @@
 
 ## 使用方法
 
-现阶段还没有做专门的启动器、服务器，可以直接通过以下命令启动爬虫：
+经过考量，不准备使用`scrapyd`或者写启动服务器之类的功能，这里只提供了可以用于定时执行的脚本以及`main.py`的CLI工具。我们计划在以后同意实现后端整个工作流的控制管理，不在这里单一实现。目前，可以直接通过以下命令启动爬虫：
 
 ```
 scrapy crawl <spider_name>
@@ -67,3 +86,39 @@ scarpy crawl <spider_name> -a <arg1>=<val1> <arg2>=<val2> ...
 ```
 scrapy crawl bangumi_anime -a fail=off
 ```
+
+```
+scrapy crawl bangumi_anime_episode_intro -a full=on
+```
+
+或者也可以使用CLI命令：
+
+```
+python3 main.py crawl --help
+Usage: main.py crawl [OPTIONS] SPIDER
+
+  start SPIDER crawling using scrapy
+
+  SPIDER: name of the spider to start
+
+Options:
+  --fail  whether start in fail mode
+  --full  this option is only for episode introduction, whether crawl the full
+          list. (extremely time consuming)
+  --help  Show this message and exit.
+```
+
+## 关于脚本
+
+可以发现，在仓库的根目录我们还提供了下面两个脚本:
+- `run_initial.sh`
+- `run_cron.sh`
+
+之所以提供脚本其实是因为`scrapy`没有提供定位到特定目录开始任务的命令行参数选项...所以我们就手动实现一下咯。
+
+- `run_initial.sh`: 耗时非常长，适用于初次构建数据库，或者间隔较长时间定时爬取使用。按顺序爬取:
+  - `bangumi_anime_list`
+  - `bangumi_anime`
+  - `bangumi_anime_episode`
+  - `bangumi_anime_episode_intro (full)`
+- `run_cron.sh`: 相较于上面那个脚本, `bangumi_anime_episode_intro`只进行未播放剧集爬取，正如脚本的名字，适合于定时任务，其他方面并无差别
