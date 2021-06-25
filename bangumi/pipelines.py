@@ -41,7 +41,7 @@ class BangumiPipeline:
 		if isinstance(item, BangumiAnimeEpisodeItem):
 			table = 'bangumi_anime_episode'
 			type = 'episode'
-			id = item['eid']
+			id = item['sid']
 		if isinstance(item, BangumiAnimeEpisodeIntroItem):
 			table = 'bangumi_anime_episode'
 			type = 'episode_intro'
