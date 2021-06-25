@@ -9,12 +9,13 @@ class BangumiAnimeEpisodeIntroSpider(scrapy.Spider):
 	name = 'bangumi_anime_episode_intro'
 	allowed_domains = [bangumi_settings.BASE_DOMAIN]
 
-	def __init__(self, fail='off', *args, **kwargs):
+	def __init__(self, fail='off', full='off', *args, **kwargs):
 		super(BangumiAnimeEpisodeIntroSpider, self).__init__(*args, **kwargs)
 		database = BangumiDatabase(database_settings.CONFIG)
 		eid_list = []
 		if fail == 'on': eid_list = database.read_fail_list('episode_intro')
-		else: eid_list = database.read_eid_list()
+		if full == 'on': eid_list = database.read_full_eid_list()
+		else: eid_list = database.read_main_eid_list()
 		self.start_urls = [
 			f'{bangumi_settings.BASE_URL}/ep/{eid}' for eid in eid_list
 		]

@@ -118,9 +118,20 @@ class BangumiDatabase(object):
 		cursor.close()
 		return res
 	
-	def read_eid_list(self):
+	def read_full_eid_list(self):
 		cursor = self.database.cursor()
 		query = f'SELECT `eid` FROM bangumi_anime_episode'
+		cursor.execute(query)
+
+		res = []
+		for eid in cursor:
+			res.append(eid[0])
+		cursor.close()
+		return res
+	
+	def read_main_eid_list(self):
+		cursor = self.database.cursor()
+		query = f'SELECT `eid` FROM bangumi_anime_episode WHERE `status` <> "Air"'
 		cursor.execute(query)
 
 		res = []
