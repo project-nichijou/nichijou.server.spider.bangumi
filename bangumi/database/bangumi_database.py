@@ -1,8 +1,6 @@
 import mysql.connector
 import copy
 
-from mysql.connector import cursor
-
 class BangumiDatabase(object):
 	
 	def __init__(self, config):
@@ -96,6 +94,18 @@ class BangumiDatabase(object):
 		self.database.commit()
 		cursor.close()
 	
+	def update(self, table: str, p_key: str, values: dict):
+		keys = copy.deepcopy(list(values.keys()))
+		keys.remove(p_key)
+		
+		cmd = f'UPDATE {table} SET {", ".join(f"`{key}` = %({key})s" for key in keys)} WHERE `{p_key}` = %({p_key})s'
+
+		cursor = self.database.cursor()
+		cursor.execute(cmd, values)
+
+		self.database.commit()
+		cursor.close()
+	
 	def read_sid_list(self, type: str):
 		cursor = self.database.cursor()
 
@@ -105,6 +115,17 @@ class BangumiDatabase(object):
 		res = []
 		for sid in cursor:
 			res.append(sid[0])
+		cursor.close()
+		return res
+	
+	def read_eid_list(self):
+		cursor = self.database.cursor()
+		query = f'SELECT `eid` FROM bangumi_anime_episode'
+		cursor.execute(query)
+
+		res = []
+		for eid in cursor:
+			res.append(eid[0])
 		cursor.close()
 		return res
 

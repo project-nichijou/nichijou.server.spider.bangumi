@@ -29,35 +29,44 @@ class BangumiPipeline:
 		if isinstance(item, BangumiIDItem):
 			table = 'bangumi_id'
 			type = 'id'
-			id = item['sid']
+			p_id = 'sid'
+			method = 'write'
 		if isinstance(item, BangumiAnimeItem):
 			table = 'bangumi_anime'
 			type = 'anime'
-			id = item['sid']
+			p_id = 'sid'
+			method = 'write'
 		if isinstance(item, BangumiAnimeNameItem):
 			table = 'bangumi_anime_name'
 			type = 'anime_name'
-			id = item['sid']
+			p_id = 'sid'
+			method = 'write'
 		if isinstance(item, BangumiAnimeEpisodeItem):
 			table = 'bangumi_anime_episode'
 			type = 'episode'
-			id = item['sid']
+			p_id = 'sid'
+			method = 'write'
 		if isinstance(item, BangumiAnimeEpisodeIntroItem):
 			table = 'bangumi_anime_episode'
 			type = 'episode_intro'
-			id = item['eid']
+			p_id = 'eid'
+			method = 'update'
 		if isinstance(item, BangumiAnimeFailItem):
 			table = 'request_failed'
+			method = 'write'
 		# adjust links
 		values = dict(item)
 		for key in values.keys():
 			if str(key).endswith('HTML') and values[key] != None:
 				values[key] = BangumiPipeline.convert_to_absoulte(values[key])
 		# write section
-		self.save_to_database(table, values)
+		if method == 'write':
+			self.database.write(table, values)
+		if method == 'update':
+			self.database.update(table, p_id, values)
 		# delete fail if exist
 		if not type == 'fail':
-			self.database.del_fail(type=type, id=id)
+			self.database.del_fail(type=type, id=item[p_id])
 		return item
 
 	def convert_to_absoulte(html: str):
@@ -67,6 +76,3 @@ class BangumiPipeline:
 			if link.attrs['href'].startswith('/'):
 				link.attrs['href'] = f'{bangumi_settings.ORIGIN_URL}{link.attrs["href"]}'
 		return str(soup)
-
-	def save_to_database(self, table: str, values: dict):
-		self.database.write(table, values)
