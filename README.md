@@ -2,7 +2,7 @@
 
 **!!! REFACTORING IN PROCESS, CANNOT BE USED NOW !!!**
 
-上个可是用版本详见: [v0.1.0](./docs/v0.1.0.md)
+上个可用版本详见: [v0.1.0](./docs/v0.1.0.md)
 
 # 0x00 Bangumi Spider [Project Nichijou]
 
