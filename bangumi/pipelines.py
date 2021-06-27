@@ -8,7 +8,6 @@
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi import bangumi_settings
-from bangumi.items.bangumi_anime_episode_intro import BangumiAnimeEpisodeIntroItem
 from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
 from bangumi.items.bangumi_anime import BangumiAnimeItem
 from bangumi.items.bangumi_id import BangumiIDItem
@@ -30,40 +29,27 @@ class BangumiPipeline:
 			table = 'bangumi_id'
 			type = 'id'
 			p_id = 'sid'
-			method = 'write'
 		if isinstance(item, BangumiAnimeItem):
 			table = 'bangumi_anime'
 			type = 'anime'
 			p_id = 'sid'
-			method = 'write'
 		if isinstance(item, BangumiAnimeNameItem):
 			table = 'bangumi_anime_name'
 			type = 'anime_name'
 			p_id = 'sid'
-			method = 'write'
 		if isinstance(item, BangumiAnimeEpisodeItem):
 			table = 'bangumi_anime_episode'
 			type = 'episode'
 			p_id = 'sid'
-			method = 'write'
-		if isinstance(item, BangumiAnimeEpisodeIntroItem):
-			table = 'bangumi_anime_episode'
-			type = 'episode_intro'
-			p_id = 'eid'
-			method = 'update'
 		if isinstance(item, BangumiAnimeFailItem):
 			table = 'request_failed'
-			method = 'write'
 		# adjust links
 		values = dict(item)
 		for key in values.keys():
 			if str(key).endswith('HTML') and values[key] != None:
 				values[key] = BangumiPipeline.convert_to_absoulte(values[key])
 		# write section
-		if method == 'write':
-			self.database.write(table, values)
-		if method == 'update':
-			self.database.update(table, p_id, values)
+		self.database.write(table, values)
 		# delete fail if exist
 		if not type == 'fail':
 			self.database.del_fail(type=type, id=item[p_id])
