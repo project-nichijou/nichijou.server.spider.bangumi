@@ -1,4 +1,4 @@
-from bangumi import bangumi_settings
+from bangumi.config import bangumi_settings
 from bangumi.items.bangumi_id import BangumiIDItem
 import scrapy
 

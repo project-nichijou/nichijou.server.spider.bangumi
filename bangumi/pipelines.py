@@ -7,7 +7,7 @@
 # useful for handling different item types with a single interface
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
-from bangumi import bangumi_settings
+from bangumi.config import bangumi_settings
 from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
 from bangumi.items.bangumi_anime import BangumiAnimeItem
 from bangumi.items.bangumi_id import BangumiIDItem

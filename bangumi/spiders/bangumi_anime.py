@@ -3,7 +3,7 @@ from bangumi.api.bangumi_api import BangumiAPI
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi.items.bangumi_anime import BangumiAnimeItem
-from bangumi import bangumi_settings
+from bangumi.config import bangumi_settings
 from bangumi.database.bangumi_database import BangumiDatabase
 from bangumi.database import database_settings
 import scrapy
