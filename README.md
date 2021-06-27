@@ -1,9 +1,228 @@
-**!!! 项目正在进行重构，无法使用 !!!**
-
-**!!! REFACTORING IN PROCESS, CANNOT BE USED NOW !!!**
-
-上个可用版本详见: [v0.1.0](./docs/v0.1.0.md)
-
 # 0x00 Bangumi Spider [Project Nichijou]
 
 本项目作为项目[Project Nichijou](https://github.com/project-nichijou)中的子项目，是[Bangumi 番组计划](bgm.tv)的爬虫，用于构建番剧数据库。完整内容详见: https://github.com/project-nichijou/intro
+
+- [0x00 Bangumi Spider [Project Nichijou]](#0x00-bangumi-spider-project-nichijou)
+	- [思路与流程](#思路与流程)
+	- [关于数据库](#关于数据库)
+	- [关于爬虫](#关于爬虫)
+	- [环境](#环境)
+	- [配置方法](#配置方法)
+	- [使用方法](#使用方法)
+	- [关于脚本](#关于脚本)
+	- [Change log](#change-log)
+
+## 思路与流程
+
+本repo只包含：
+- 数据爬取
+- 写入数据库
+
+如果阅读代码可以发现，我们对于大量难以处理的字段使用了直接写入`HTML`的方式，会在后续的流程中 (见[项目架构](https://github.com/project-nichijou/intro)) 进行处理。这样做的原因在于：
+
+1. 提高爬虫速度 (毕竟服务器是小水管 1C2G)
+2. 降低在爬取阶段的报错、解析失败、写入失败频率
+3. 有利于提高整体工作的稳定性，方便调试
+4. 降低数据库复杂度，方便维护
+
+## 关于爬虫
+
+本项目实现了如下Spider:
+
+- `bangumi_anime_list`: 爬取动画列表, `/anime/browser/?sort=title&page=<page>`
+- `bangumi_book_list`: 爬取书籍列表, `/anime/book/?sort=title&page=<page>`
+- `bangumi_game_list`: 爬取游戏列表, `/anime/game/?sort=title&page=<page>`
+- `bangumi_music_list`: 爬取音乐列表, `/anime/music/?sort=title&page=<page>`
+- `bangumi_real_list`: 爬取三次元列表, `/anime/real/?sort=title&page=<page>`
+- `bangumi_anime`: 爬取动画信息, `/subject/<sid>` ([API](https://github.com/bangumi/api)与网页并用, 一个蜘蛛包括了以前的`bangumi_anime_episode`, `bangumi_anime_episode_intro`, `bangumi_anime`)
+  - API获取部分:
+    - 名称
+    - 中文名
+    - 简介
+    - 话数
+    - 放送开始日期
+    - 放送星期
+    - 封面图 (默认: 大)
+    - 评分
+    - 站内排名
+    - 剧集详细信息
+  - 网页爬取部分:
+    - 所有属性列表 (HTML)
+    - 标签 (空格隔开)
+    - 种类 (TV, OVA, ...)
+
+因为主项目的性质，故主要精力集中在番剧上面，如果您有其他需要可以自行实现 (欢迎提交PR！)
+
+## 环境
+
+- MySQL 5.7.4 +
+- Python 3.6 +
+- Scrapy
+- beautifulsoup4
+- Ubuntu (WSL)
+- click (optional, 用于构建CLI)
+- mysql-connector-python
+
+一键安装依赖:
+
+```
+pip3 install -r requirements.txt
+```
+
+## 配置方法
+
+本项目有两个配置文件：
+- `bangumi/config/bangumi_settings.py`
+- `bangumi/database/database_settings.py`
+
+可以发现这两个文件在本`repo`中只有`_template`，需要将这两个`template`配置好并复制、重命名。
+
+关于配置字段的具体含义，文件中都有注释，可以自行查阅。
+
+注意：`bangumi_settings`中的`COOKIES`在某些情况下需要以下字段，~~否则无法爬取特殊内容~~:
+
+```
+{
+	"chii_auth": <value>
+}
+```
+
+## 使用方法
+
+经过考量，不准备使用`scrapyd`或者写启动服务器之类的功能，这里只提供了可以用于定时执行的脚本以及`main.py`的CLI工具。我们计划在以后同意实现后端整个工作流的控制管理，不在这里单一实现。目前，可以直接通过以下命令启动爬虫：
+
+```
+scrapy crawl <spider_name>
+```
+
+`<spider_name>`即为蜘蛛的文件名，位于`bangumi/spider/`目录下。
+
+注意：对于部分蜘蛛，如`bangumi_anime`，有额外的参数。如果需要传参，请使用如下命令：
+
+```
+scarpy crawl <spider_name> -a <arg1>=<val1> <arg2>=<val2> ...
+```
+
+比如：
+
+```
+scrapy crawl bangumi_anime -a fail=off
+```
+
+或者也可以使用CLI命令：
+
+```
+python3 main.py 
+Usage: main.py [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  crawl   start SPIDER crawling using scrapy
+  initdb  init bangumi database
+```
+
+```
+python3 main.py crawl --help
+Usage: main.py crawl [OPTIONS] SPIDER
+
+  start SPIDER crawling using scrapy
+
+  SPIDER: name of the spider to start
+
+Options:
+  --fail  whether start in fail mode
+  --help  Show this message and exit.
+```
+
+## 关于数据库
+
+本项目目前使用MySQL作为数据库，更多的数据库日后~~可能~~会进行支持，如果有兴趣可以提交PR，持续关注。
+
+此外，当前的默认数据库名称为`bangumi`，本工具会自动新建数据库以及数据表 (若不存在) 。如果和本地数据库名称有冲突，可以在`bangumi/database/database_settings.py`中修改。
+
+下面为各张`table`的定义语句:
+
+```sql
+CREATE TABLE IF NOT EXISTS `bangumi_id` (
+	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
+	`type`		VARCHAR(10) NOT NULL,	# 种类: anime, book, etc.
+	`name`		VARCHAR(200) NOT NULL,	# 原名
+	`name_cn`	VARCHAR(200) NOT NULL,	# 中文名 (没有就是原名)
+	PRIMARY KEY ( `sid` ),
+	UNIQUE KEY ( `sid` )
+) ENGINE=InnoDB CHARSET=utf8
+```
+
+```sql
+CREATE TABLE IF NOT EXISTS `bangumi_anime` (
+	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
+	`name`		VARCHAR(200) NOT NULL,	# 原名
+	`name_cn`	VARCHAR(200) NOT NULL,	# 中文名 (没有就是原名)
+	`summary`	LONGTEXT,				# 简介
+	`eps_count`	INT,					# 话数
+	`date`		VARCHAR(20),			# 放送开始日期
+	`weekday`	INT,					# 放送星期
+	`metaHTML`	LONGTEXT,				# 所有属性列表 (HTML)
+	`tags`		LONGTEXT,				# 标签, 空格隔开
+	`type`		VARCHAR(10),			# 种类: TV, OVA, ...
+	`image`		LONGTEXT,				# 封面图, large > common > medium > small > grid
+	`rating`	DECIMAL(32,28),			# 评分, rating.score
+	`rank`		INT,					# 站内排名
+	PRIMARY KEY ( `sid` ),
+	UNIQUE KEY ( `sid` )
+) ENGINE=InnoDB CHARSET=utf8
+```
+
+```sql
+CREATE TABLE IF NOT EXISTS `bangumi_anime_name` (
+	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
+	`name`		VARCHAR(200) NOT NULL,	# 名称
+	PRIMARY KEY ( `name` ),
+	UNIQUE KEY ( `name` )
+) ENGINE=InnoDB CHARSET=utf8
+```
+
+```sql
+CREATE TABLE IF NOT EXISTS `bangumi_anime_episode` (
+	`eid`		INT UNSIGNED NOT NULL,	# 剧集ID
+	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
+	`name`		VARCHAR(200) NOT NULL,	# 剧集标题
+	`name_cn`	VARCHAR(200) NOT NULL,	# 中文标题 (没有就是标题)
+	# 类型: 本篇 0 / SP 1 / OP 2 / ED 3 / 预告,宣传,广告 4 / MAD 5 / 其他 6
+	`type`		INT UNSIGNED NOT NULL,
+	`sort`		INT UNSIGNED NOT NULL,	# 顺序 (当前type中的多少话)
+	`status`	VARCHAR(10) NOT NULL,	# 是否已放送 状态: Air / NA / Today
+	`duration`	VARCHAR(20) NOT NULL,	# 时常, e.g. 24m
+	`date`		VARCHAR(20) NOT NULL,	# 放送日期
+	`desc`		LONGTEXT,				# 简介
+	PRIMARY KEY ( `eid` ),
+	UNIQUE KEY ( `eid` )
+) ENGINE=InnoDB CHARSET=utf8
+```
+
+```sql
+CREATE TABLE IF NOT EXISTS `request_failed` (
+	`id`		INT UNSIGNED NOT NULL,	# 失败ID
+	`type`		VARCHAR(20) NOT NULL,	# 失败种类
+	`desc`		LONGTEXT,				# 失败信息
+	PRIMARY KEY ( `id` ),
+	UNIQUE KEY ( `id` )
+) ENGINE=InnoDB CHARSET=utf8
+```
+
+## 关于脚本
+
+可以发现，在仓库的根目录我们还提供了下面的脚本:
+- `run.sh`
+
+之所以提供脚本其实是因为`scrapy`没有提供定位到特定目录开始任务的命令行参数选项...所以我们就手动实现一下咯。
+
+此脚本自动按顺序启动下面两个蜘蛛:
+- `bangumi_anime_list`
+- `bangumi_anime`
+
+## Change log
+
+- [v0.1.0](docs/v0.1.0.md)
