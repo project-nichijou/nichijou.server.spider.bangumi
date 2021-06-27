@@ -6,3 +6,5 @@ class BangumiAnimeFailItem(scrapy.Item):
 	id = scrapy.Field()
 	# type of item
 	type = scrapy.Field()
+	# error description
+	desc = scrapy.Field()

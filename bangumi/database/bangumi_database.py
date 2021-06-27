@@ -25,7 +25,7 @@ class BangumiDatabase(object):
 			'	`sid`		INT UNSIGNED NOT NULL,'
 			'	`type`		VARCHAR(10) NOT NULL,'
 			'	`name`		VARCHAR(200) NOT NULL,'
-			'	`cn_name`	VARCHAR(200) NOT NULL,'
+			'	`name_cn`	VARCHAR(200) NOT NULL,'
 			'	PRIMARY KEY ( `sid` ),'
 			'	UNIQUE KEY ( `sid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
@@ -34,14 +34,17 @@ class BangumiDatabase(object):
 			'CREATE TABLE IF NOT EXISTS `bangumi_anime` ('
 			'	`sid`		INT UNSIGNED NOT NULL,'
 			'	`name`		VARCHAR(200) NOT NULL,'
-			'	`cn_name`	VARCHAR(200) NOT NULL,'
-			'	`introHTML`	LONGTEXT,'
-			'	`episode`	INT,'
-			'	`start`		DATE,'
-			'	`attrHTML`	LONGTEXT,'
+			'	`name_cn`	VARCHAR(200) NOT NULL,'
+			'	`summary`	LONGTEXT,'
+			'	`eps_count`	INT,'
+			'	`date`		VARCHAR(20),'
+			'	`weekday`	INT,'
+			'	`metaHTML`	LONGTEXT,'
 			'	`tags`		LONGTEXT,'
 			'	`type`		VARCHAR(10),'
-			'	`thumb`		LONGTEXT,'
+			'	`image`		LONGTEXT,'
+			'	`rating`	DECIMAL(32,28),'
+			'	`rank`		INT,'
 			'	PRIMARY KEY ( `sid` ),'
 			'	UNIQUE KEY ( `sid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
@@ -59,11 +62,13 @@ class BangumiDatabase(object):
 			'	`eid`		INT UNSIGNED NOT NULL,'
 			'	`sid`		INT UNSIGNED NOT NULL,'
 			'	`name`		VARCHAR(200) NOT NULL,'
-			'	`cn_name`	VARCHAR(200) NOT NULL,'
-			'	`type`		VARCHAR(10) NOT NULL,'
-			'	`order`		INT UNSIGNED NOT NULL,'
+			'	`name_cn`	VARCHAR(200) NOT NULL,'
+			'	`type`		INT UNSIGNED NOT NULL,'
+			'	`sort`		INT UNSIGNED NOT NULL,'
 			'	`status`	VARCHAR(10) NOT NULL,'
-			'	`introHTML`	LONGTEXT,'
+			'	`duration`	VARCHAR(20) NOT NULL,'
+			'	`date`		VARCHAR(20) NOT NULL,'
+			'	`desc`		LONGTEXT,'
 			'	PRIMARY KEY ( `eid` ),'
 			'	UNIQUE KEY ( `eid` )'
 			') ENGINE=InnoDB CHARSET=utf8'
@@ -72,6 +77,7 @@ class BangumiDatabase(object):
 			'CREATE TABLE IF NOT EXISTS `request_failed` ('
 			'	`id`		INT UNSIGNED NOT NULL,'
 			'	`type`		VARCHAR(20) NOT NULL,'
+			'	`desc`		LONGTEXT,'
 			'	PRIMARY KEY ( `id` ),'
 			'	UNIQUE KEY ( `id` )'
 			') ENGINE=InnoDB CHARSET=utf8'
@@ -94,18 +100,6 @@ class BangumiDatabase(object):
 		self.database.commit()
 		cursor.close()
 	
-	def update(self, table: str, p_key: str, values: dict):
-		keys = copy.deepcopy(list(values.keys()))
-		keys.remove(p_key)
-		
-		cmd = f'UPDATE {table} SET {", ".join(f"`{key}` = %({key})s" for key in keys)} WHERE `{p_key}` = %({p_key})s'
-
-		cursor = self.database.cursor()
-		cursor.execute(cmd, values)
-
-		self.database.commit()
-		cursor.close()
-	
 	def read_sid_list(self, type: str):
 		cursor = self.database.cursor()
 
@@ -115,17 +109,6 @@ class BangumiDatabase(object):
 		res = []
 		for sid in cursor:
 			res.append(sid[0])
-		cursor.close()
-		return res
-	
-	def read_eid_list(self):
-		cursor = self.database.cursor()
-		query = f'SELECT `eid` FROM bangumi_anime_episode'
-		cursor.execute(query)
-
-		res = []
-		for eid in cursor:
-			res.append(eid[0])
 		cursor.close()
 		return res
 
