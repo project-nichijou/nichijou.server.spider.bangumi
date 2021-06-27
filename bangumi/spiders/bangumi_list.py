@@ -30,9 +30,9 @@ class BangumiListSpider(scrapy.Spider):
 			result = BangumiIDItem()
 			result['sid'] = item.attrib['id'][5:] # get rid of the prefix `item_`
 			result['type'] = self.type
-			result['cn_name'] = item.xpath('./div/h3/a/text()').get()
+			result['name_cn'] = item.xpath('./div/h3/a/text()').get()
 			result['name'] = item.xpath('./div/h3/small[@class="grey"]/text()').get()
-			if result['name'] == None: result['name'] = result['cn_name']
+			if result['name'] == None: result['name'] = result['name_cn']
 			yield result
 		self.page_var += 1
 		yield scrapy.Request(self.get_current_url())

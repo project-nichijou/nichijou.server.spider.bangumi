@@ -53,20 +53,20 @@ class BangumiAnimeEpisodeSpider(scrapy.Spider):
 				e_status = episode.xpath('./h6/span[@class="epAirStatus"]/span/@class').get()
 				e_name = episode.xpath('./h6/a/text()').get()
 				eid = int(str(episode.xpath('./h6/a/@href').get()).split('/')[-1])
-				e_cn_name = episode.xpath('./h6/span[@class="tip"]/text()').get()
-				if e_cn_name == None or e_cn_name == '':
-					e_cn_name = e_name
+				e_name_cn = episode.xpath('./h6/span[@class="tip"]/text()').get()
+				if e_name_cn == None or e_name_cn == '':
+					e_name_cn = e_name
 				else:
-					if str(e_cn_name).startswith(' / '):
-						e_cn_name = e_cn_name[3:]
+					if str(e_name_cn).startswith(' / '):
+						e_name_cn = e_name_cn[3:]
 					type = e_type
 					if type == '本篇': type = ''
-					e_cn_name = f'{type}{e_order}.{e_cn_name}'
+					e_name_cn = f'{type}{e_order}.{e_name_cn}'
 				yield BangumiAnimeEpisodeItem(
 					eid = eid,
 					sid = sid,
 					name = e_name,
-					cn_name = e_cn_name,
+					name_cn = e_name_cn,
 					type = e_type,
 					order = e_order,
 					status = e_status

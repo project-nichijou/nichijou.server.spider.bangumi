@@ -53,8 +53,8 @@ class BangumiAnimeSpider(scrapy.Spider):
 			fail_res['id'] = result['sid']
 			fail_res['type'] = 'anime'
 			return fail_res
-		# set default cn_name
-		result['cn_name'] = result['name']
+		# set default name_cn
+		result['name_cn'] = result['name']
 		yield BangumiAnimeNameItem(
 			sid = result['sid'],
 			name = result['name']
@@ -70,12 +70,12 @@ class BangumiAnimeSpider(scrapy.Spider):
 			try: raw = item.xpath('./text()').get()
 			except: continue
 			if raw == None or raw == '': continue
-			# cn_name
+			# name_cn
 			if info_title == '中文名':
-				result['cn_name'] = raw
+				result['name_cn'] = raw
 				yield BangumiAnimeNameItem(
 					sid = result['sid'],
-					name = result['cn_name']
+					name = result['name_cn']
 				)
 			# 别名
 			if info_title == '别名':
