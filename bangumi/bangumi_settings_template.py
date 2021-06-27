@@ -18,6 +18,8 @@ class SpiderProtocol(Enum):
 
 # Mode of spider, type: SpiderMode 
 SPIDER_MODE = SpiderMode.ORIGIN
+# Mode of spider for API, type: SpiderMode
+API_SPIDER_MODE = SpiderMode.MIRROR
 # Protocol of spider, type: SpiderProtocol
 SPIDER_PROTOCOL = SpiderProtocol.HTTPS
 
@@ -37,10 +39,13 @@ MIRROR_API_DOMAIN = 'mirror.api.bgm.rincat.ch'
 if SPIDER_MODE == SpiderMode.ORIGIN:
 	BASE_DOMAIN = ORIGIN_DOMAIN
 	BASE_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_DOMAIN}'
-	BASE_API_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_API_DOMAIN}'
 if SPIDER_MODE == SpiderMode.MIRROR:
 	BASE_DOMAIN = MIRROR_DOMAIN
 	BASE_URL = f'{SPIDER_PROTOCOL.value}{MIRROR_DOMAIN}'
+
+if API_SPIDER_MODE == SpiderMode.ORIGIN:
+	BASE_API_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_API_DOMAIN}'
+if API_SPIDER_MODE == SpiderMode.MIRROR:
 	BASE_API_URL = f'{SPIDER_PROTOCOL.value}{MIRROR_API_DOMAIN}'
 
 COOKIES = {}
