@@ -63,7 +63,7 @@ class BangumiDatabase(object):
 			'	`sid`		INT UNSIGNED NOT NULL,'
 			'	`name`		VARCHAR(200) NOT NULL,'
 			'	`name_cn`	VARCHAR(200) NOT NULL,'
-			'	`type`		VARCHAR(10) NOT NULL,'
+			'	`type`		INT UNSIGNED NOT NULL,'
 			'	`sort`		INT UNSIGNED NOT NULL,'
 			'	`status`	VARCHAR(10) NOT NULL,'
 			'	`duration`	VARCHAR(20) NOT NULL,'

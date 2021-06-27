@@ -1,3 +1,4 @@
+from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
 from bangumi.api.bangumi_api import BangumiAPI
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
@@ -135,16 +136,32 @@ class BangumiAnimeSpider(scrapy.Spider):
 			yield fail_res
 		
 		### API Episode section
-		# try:
-			
-		# except Exception as e:
-		# 	fail_res['desc'] = (
-		# 		'exception caught when handling episodes in API. \n'
-		# 		f'exception info: {repr(e)} \n'
-		# 		f'traceback: \n'
-		# 		f'{traceback.format_exc()}'
-		# 	)
-		# 	return fail_res
+		eps = api_res['eps']
+		if eps == None: return
+		for ep in eps:
+			try:
+				ep_res = BangumiAnimeEpisodeItem()
+				ep_res['sid'] = result['sid']
+				ep_res['eid'] = ep['id']
+				ep_res['type'] = ep['type']
+				ep_res['sort'] = ep['sort']
+				ep_res['status'] = ep['status']
+				ep_res['duration'] = ep['duration']
+				ep_res['date'] = ep['airdate']
+				ep_res['desc'] = ep['desc']
+				ep_res['name'] = ep['name']
+				ep_res['name_cn'] = ep['name_cn']
+				if ep_res['name_cn'] == None or ep_res['name_cn'] == '':
+					ep_res['name_cn'] = ep_res['name']
+				yield ep_res
+			except Exception as e:
+				fail_res['desc'] = (
+					'exception caught when handling episodes in API. \n'
+					f'exception info: {repr(e)} \n'
+					f'traceback: \n'
+					f'{traceback.format_exc()}'
+				)
+				return fail_res
 
 def get_field_value(selector, index=0):
     return selector[index] if len(selector) != 0 else ''
