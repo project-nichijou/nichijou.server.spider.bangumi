@@ -34,8 +34,8 @@
 - `bangumi_game_list`: 爬取游戏列表, `/anime/game/?sort=title&page=<page>`
 - `bangumi_music_list`: 爬取音乐列表, `/anime/music/?sort=title&page=<page>`
 - `bangumi_real_list`: 爬取三次元列表, `/anime/real/?sort=title&page=<page>`
-- `bangumi_anime`: 爬取动画信息, `/subject/<sid>` ([API](https://github.com/bangumi/api)与网页并用, 一个蜘蛛包括了以前的`bangumi_anime_episode`, `bangumi_anime_episode_intro`, `bangumi_anime`)
-  - API获取部分:
+- 下面两个蜘蛛是一组 (需要注意使用的先后顺序, 这两个蜘蛛囊括了原来的`bangumi_anime_episode`, `bangumi_anime_episode_intro`, `bangumi_anime`)
+  - `bangumi_anime_api`: 爬取[API](https://github.com/bangumi/api)提供的番剧信息
     - 名称
     - 中文名
     - 简介
@@ -46,10 +46,10 @@
     - 评分
     - 站内排名
     - 剧集详细信息
-  - 网页爬取部分:
-    - 所有属性列表 (HTML)
-    - 标签 (空格隔开)
-    - 种类 (TV, OVA, ...)
+  - `bangumi_anime_scrape`: 爬取网页上的番剧信息 `/subject/<sid>`
+      - 所有属性列表 (HTML)
+      - 标签 (空格隔开)
+      - 种类 (TV, OVA, ...)
 
 因为主项目的性质，故主要精力集中在番剧上面，如果您有其他需要可以自行实现 (欢迎提交PR！)
 
@@ -219,9 +219,10 @@ CREATE TABLE IF NOT EXISTS `request_failed` (
 
 之所以提供脚本其实是因为`scrapy`没有提供定位到特定目录开始任务的命令行参数选项...所以我们就手动实现一下咯。
 
-此脚本自动按顺序启动下面两个蜘蛛:
+此脚本自动按顺序启动下面三个蜘蛛:
 - `bangumi_anime_list`
-- `bangumi_anime`
+- `bangumi_anime_api`
+- `bangumi_anime_scrape`
 
 ## Change log
 

@@ -21,7 +21,8 @@ cd $DIR
 
 ### run spiders
 scrapy crawl bangumi_anime_list
-scrapy crawl bangumi_anime
+scrapy crawl bangumi_anime_api
+scrapy crawl bangumi_anime_scrape
 
 ### go back to the original directory
 cd $CURRENT_DIR

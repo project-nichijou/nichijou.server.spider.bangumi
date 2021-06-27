@@ -1,34 +1,34 @@
 from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
-from bangumi.api.bangumi_api import BangumiAPI
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
-from bangumi.items.bangumi_anime import BangumiAnimeItem
+from bangumi.items.bangumi_anime import BangumiAnimeAPIItem
 from bangumi.config import bangumi_settings
 from bangumi.database.bangumi_database import BangumiDatabase
 from bangumi.database import database_settings
 import scrapy
 import traceback
+import json
 
 
 class BangumiAnimeSpider(scrapy.Spider):
-	name = 'bangumi_anime'
+	name = 'bangumi_anime_api'
 	allowed_domains = [bangumi_settings.BASE_DOMAIN]
 
 	def __init__(self, fail='off', *args, **kwargs):
 		super(BangumiAnimeSpider, self).__init__(*args, **kwargs)
 		database = BangumiDatabase(database_settings.CONFIG)
 		sid_list = []
-		if fail == 'on': sid_list = database.read_fail_list('anime')
+		if fail == 'on': sid_list = database.read_fail_list('anime_api')
 		else: sid_list = database.read_sid_list('anime')
-		self.start_urls = [
-			f'{bangumi_settings.BASE_URL}/subject/{sid}' for sid in sid_list
+		self.start_values = [
+			{'url': f'{bangumi_settings.BASE_API_URL}/subject/{sid}?responseGroup=large', 'sid': sid} for sid in sid_list
 		]
 	
-	def request(self, url, callback):
+	def request(self, url, callback, cb_kwargs=None):
 		'''
 		warpper for scrapy.request
 		'''
-		request = scrapy.Request(url=url, callback=callback)
+		request = scrapy.Request(url=url, callback=callback, cb_kwargs=cb_kwargs)
 		cookies = bangumi_settings.COOKIES
 		for key in cookies.keys():
 			request.cookies[key] = cookies[key]
@@ -38,26 +38,21 @@ class BangumiAnimeSpider(scrapy.Spider):
 		return request
 
 	def start_requests(self):
-		for i, url in enumerate(self.start_urls):
-			yield self.request(url, self.parse)
+		for _, val in enumerate(self.start_values):
+			yield self.request(url=val['url'], callback=self.parse, cb_kwargs={'sid': val['sid']})
 
-	def parse(self, response):
+	def parse(self, response, sid):
 		# define anime item
-		result = BangumiAnimeItem()
+		result = BangumiAnimeAPIItem()
 
 		### JUDGE FAILING SECTION
 		# sid
-		result['sid'] = int(str(response.url).split('/')[-1])
+		result['sid'] = sid
 		# fail
-		fail_res = BangumiAnimeFailItem(id=result['sid'], type='anime')
+		fail_res = BangumiAnimeFailItem(id=result['sid'], type='anime_api')
 		# api request
-		api_res = BangumiAPI.get_subject(result['sid'])
-		# name
-		name = scrapy.Selector(response=response).xpath('//*[@id="headerSubject"]/h1/a/text()').get()
+		api_res = json.loads(response.text)
 		# if None then quit
-		if name == None or name == '':
-			fail_res['desc'] = f'name from web page is none. may be 404, please check cookies. \n original response: {response.text}'
-			return fail_res
 		if api_res == {} or api_res == None:
 			fail_res['desc'] = 'api response empty'
 			return fail_res
@@ -86,6 +81,7 @@ class BangumiAnimeSpider(scrapy.Spider):
 			if api_res['rating'] == None: result['rating'] = None
 			else: result['rating'] = api_res['rating']['score']
 			result['rank'] = api_res['rank']
+			yield result
 		except Exception as e:
 			fail_res['desc'] = (
 				'exception caught when handling API fields. \n'
@@ -94,46 +90,6 @@ class BangumiAnimeSpider(scrapy.Spider):
 				f'{traceback.format_exc()}'
 			)
 			return fail_res
-
-		### scraping section
-		try:
-			# meta HTML <ul id="infobox">
-			result['metaHTML'] = scrapy.Selector(response=response).xpath('//*[@id="infobox"]').get()
-			# detailed info
-			for item in scrapy.Selector(response=response).xpath('//*[@id="infobox"]/li'):
-				# [:-2] 去掉末尾的 `: `
-				info_title = item.xpath('./span/text()').extract()[0][:-2]
-				raw = ''
-				try: raw = item.xpath('./text()').get()
-				except: continue
-				if raw == None or raw == '': continue
-				if info_title == '别名':
-					yield BangumiAnimeNameItem(sid=result['sid'], name=raw)
-				# episode
-				if info_title == '话数' and (result['eps_count'] == 0 or result['eps_count'] == None):
-					try: result['eps_count'] = int(raw)
-					except: pass
-				# start date
-				if info_title in bangumi_settings.START_INFO and (result['date'] == '' or result['date'] == None):
-					result['date'] = raw
-			# tags
-			result['tags'] = ' '.join(scrapy.Selector(response=response).xpath('//*[@id="subject_detail"]/div[@class="subject_tag_section"]/div[1]/a/span/text()').getall())
-			if result['tags'] == '无': result['tags'] = None
-			# type
-			result['type'] = scrapy.Selector(response=response).xpath('//*[@id="headerSubject"]/h1/small/text()').get()
-			if result['image'] == '' or result['image'] == None:
-				result['image'] = scrapy.Selector(response=response).xpath('//*[@id="bangumiInfo"]/div/div[1]/a/img/@src').get()
-			if str(result['image']).startswith('//'):
-				result['image'] = f'https:{result["image"]}'
-			yield result
-		except Exception as e:
-			fail_res['desc'] = (
-				'exception caught when handling scrapy response. \n'
-				f'exception info: {repr(e)} \n'
-				f'traceback: \n'
-				f'{traceback.format_exc()}'
-			)
-			yield fail_res
 		
 		### API Episode section
 		eps = api_res['eps']
@@ -162,6 +118,3 @@ class BangumiAnimeSpider(scrapy.Spider):
 					f'{traceback.format_exc()}'
 				)
 				return fail_res
-
-def get_field_value(selector, index=0):
-    return selector[index] if len(selector) != 0 else ''

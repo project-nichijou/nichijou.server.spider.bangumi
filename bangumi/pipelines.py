@@ -9,7 +9,7 @@ from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi.config import bangumi_settings
 from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
-from bangumi.items.bangumi_anime import BangumiAnimeItem
+from bangumi.items.bangumi_anime import BangumiAnimeAPIItem, BangumiAnimeScrapeItem
 from bangumi.items.bangumi_id import BangumiIDItem
 from bangumi.database.bangumi_database import BangumiDatabase
 from bangumi.database import database_settings
@@ -29,9 +29,13 @@ class BangumiPipeline:
 			table = 'bangumi_id'
 			type = 'id'
 			p_id = 'sid'
-		if isinstance(item, BangumiAnimeItem):
+		if isinstance(item, BangumiAnimeAPIItem):
 			table = 'bangumi_anime'
-			type = 'anime'
+			type = 'anime_api'
+			p_id = 'sid'
+		if isinstance(item, BangumiAnimeScrapeItem):
+			table = 'bangumi_anime'
+			type = 'anime_scrape'
 			p_id = 'sid'
 		if isinstance(item, BangumiAnimeNameItem):
 			table = 'bangumi_anime_name'

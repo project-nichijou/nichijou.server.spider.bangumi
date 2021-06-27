@@ -31,3 +31,9 @@ class BangumiAnimeItem(scrapy.Item):
 	tags = scrapy.Field()
 	# 种类: TV, OVA, ...
 	type = scrapy.Field()
+
+
+class BangumiAnimeAPIItem(BangumiAnimeItem): pass
+
+
+class BangumiAnimeScrapeItem(BangumiAnimeItem): pass

@@ -123,6 +123,16 @@ class BangumiDatabase(object):
 			res.append(id[0])
 		cursor.close()
 		return res
+	
+	def read_by_sid(self, table: str, sid: int):
+		cursor = self.database.cursor(dictionary=True)
+
+		query = f'SELECT * FROM {table} WHERE `sid` = {sid}'
+		cursor.execute(query)
+		res = cursor.fetchall()
+
+		cursor.close()
+		return res
 
 	def del_fail(self, type: str, id: int):
 		cursor = self.database.cursor()
