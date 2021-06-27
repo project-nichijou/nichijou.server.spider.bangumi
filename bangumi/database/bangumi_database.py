@@ -77,6 +77,7 @@ class BangumiDatabase(object):
 			'CREATE TABLE IF NOT EXISTS `request_failed` ('
 			'	`id`		INT UNSIGNED NOT NULL,'
 			'	`type`		VARCHAR(20) NOT NULL,'
+			'	`desc`		LONGTEXT,'
 			'	PRIMARY KEY ( `id` ),'
 			'	UNIQUE KEY ( `id` )'
 			') ENGINE=InnoDB CHARSET=utf8'
