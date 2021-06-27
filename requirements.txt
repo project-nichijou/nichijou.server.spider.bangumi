@@ -4,6 +4,7 @@ beautifulsoup4==4.9.3
 certifi==2021.5.30
 cffi==1.14.5
 chardet==4.0.0
+click==8.0.1
 constantly==15.1.0
 cryptography==3.4.7
 cssselect==1.1.0
@@ -12,6 +13,7 @@ hpack==3.0.0
 hyperframe==5.2.0
 hyperlink==21.0.0
 idna==2.10
+importlib-metadata==4.6.0
 incremental==21.3.0
 itemadapter==0.2.0
 itemloaders==1.0.4
@@ -35,6 +37,8 @@ service-identity==21.1.0
 six==1.16.0
 soupsieve==2.2.1
 Twisted==21.2.0
+typing-extensions==3.10.0.0
 urllib3==1.26.6
 w3lib==1.22.0
+zipp==3.4.1
 zope.interface==5.4.0
