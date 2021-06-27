@@ -28,13 +28,20 @@ MIRROR_DOMAIN = 'mirror.bgm.rincat.ch'
 # URL of original site
 ORIGIN_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_DOMAIN}'
 
+# API DOMAIN of original site
+ORIGIN_API_DOMAIN = 'api.bgm.tv'
+# API DOMAIN of mirror site
+MIRROR_API_DOMAIN = 'mirror.api.bgm.rincat.ch'
+
 # Define Base URL
 if SPIDER_MODE == SpiderMode.ORIGIN:
 	BASE_DOMAIN = ORIGIN_DOMAIN
 	BASE_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_DOMAIN}'
+	BASE_API_URL = f'{SPIDER_PROTOCOL.value}{ORIGIN_API_DOMAIN}'
 if SPIDER_MODE == SpiderMode.MIRROR:
 	BASE_DOMAIN = MIRROR_DOMAIN
 	BASE_URL = f'{SPIDER_PROTOCOL.value}{MIRROR_DOMAIN}'
+	BASE_API_URL = f'{SPIDER_PROTOCOL.value}{MIRROR_API_DOMAIN}'
 
 COOKIES = {}
 
