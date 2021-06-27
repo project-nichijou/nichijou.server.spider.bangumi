@@ -14,9 +14,9 @@ class BangumiAnimeItem(scrapy.Item):
 	# 话数 (猜测: 只有正片)
 	eps_count = scrapy.Field()
 	# 放送开始日期
-	air_date = scrapy.Field()
+	date = scrapy.Field()
 	# 放送星期
-	air_weekday = scrapy.Field()
+	weekday = scrapy.Field()
 	# 封面图, large > common > medium > small > grid
 	image = scrapy.Field()
 	# 评分, rating.score

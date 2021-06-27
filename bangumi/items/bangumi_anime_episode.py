@@ -19,6 +19,6 @@ class BangumiAnimeEpisodeItem(scrapy.Item):
 	# 时常, e.g. 24m
 	duration = scrapy.Field()
 	# 放送日期
-	airdate = scrapy.Field()
+	date = scrapy.Field()
 	# 简介
 	desc = scrapy.Field()
