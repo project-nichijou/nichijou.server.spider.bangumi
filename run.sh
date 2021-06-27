@@ -20,8 +20,6 @@ cd $DIR
 ### run spiders
 scrapy crawl bangumi_anime_list
 scrapy crawl bangumi_anime
-scrapy crawl bangumi_anime_episode
-scrapy crawl bangumi_anime_episode_intro -a full=off
 
 ### go back to the original directory
 cd $CURRENT_DIR
