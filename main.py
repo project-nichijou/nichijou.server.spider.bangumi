@@ -1,3 +1,5 @@
+from bangumi.database.bangumi_database import BangumiDatabase
+from bangumi.database import database_settings
 from scrapy import cmdline
 import click
 
@@ -25,6 +27,14 @@ def crawl(spider: str, fail: bool, full: bool):
 	if full:
 		command = f'{command} full=on'
 	cmdline.execute(command.split(' '))
+
+
+@cli.command()
+def initdb():
+	'''
+	init bangumi database
+	'''
+	BangumiDatabase(database_settings.CONFIG)
 
 
 if __name__ == '__main__':
