@@ -1,5 +1,7 @@
 #!/bin/bash
 
+START_TIME=`date +%s`
+
 ### get current directory
 CURRENT_DIR=$(pwd)
 
@@ -23,3 +25,9 @@ scrapy crawl bangumi_anime
 
 ### go back to the original directory
 cd $CURRENT_DIR
+
+### calculate time
+END_TIME=`date +%s`
+EXECUTING_TIME=`expr $END_TIME - $START_TIME`
+
+echo "time consumed: "$EXECUTING_TIME" seconds"
