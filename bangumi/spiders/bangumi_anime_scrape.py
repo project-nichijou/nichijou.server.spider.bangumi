@@ -1,4 +1,3 @@
-from bangumi.items.bangumi_anime_episode import BangumiAnimeEpisodeItem
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi.items.bangumi_anime import BangumiAnimeScrapeItem
@@ -7,15 +6,14 @@ from bangumi.database.bangumi_database import BangumiDatabase
 from bangumi.database import database_settings
 import scrapy
 import traceback
-import json
 
 
-class BangumiAnimeSpider(scrapy.Spider):
+class BangumiAnimeScrapeSpider(scrapy.Spider):
 	name = 'bangumi_anime_scrape'
 	allowed_domains = [bangumi_settings.BASE_DOMAIN]
 
 	def __init__(self, fail='off', *args, **kwargs):
-		super(BangumiAnimeSpider, self).__init__(*args, **kwargs)
+		super(BangumiAnimeScrapeSpider, self).__init__(*args, **kwargs)
 		self.database = BangumiDatabase(database_settings.CONFIG)
 		sid_list = []
 		if fail == 'on': sid_list = self.database.read_fail_list('anime_scrape')
@@ -24,11 +22,11 @@ class BangumiAnimeSpider(scrapy.Spider):
 			{'url': f'{bangumi_settings.BASE_URL}/subject/{sid}', 'sid': sid} for sid in sid_list
 		]
 	
-	def request(self, url, callback, cb_kwargs=None):
+	def request(self, url, callback, errback, cb_kwargs=None):
 		'''
 		warpper for scrapy.request
 		'''
-		request = scrapy.Request(url=url, callback=callback, cb_kwargs=cb_kwargs)
+		request = scrapy.Request(url=url, callback=callback, errback=errback, cb_kwargs=cb_kwargs)
 		cookies = bangumi_settings.COOKIES
 		for key in cookies.keys():
 			request.cookies[key] = cookies[key]
@@ -39,22 +37,27 @@ class BangumiAnimeSpider(scrapy.Spider):
 
 	def start_requests(self):
 		for _, val in enumerate(self.start_values):
-			yield self.request(url=val['url'], callback=self.parse, cb_kwargs={'sid': val['sid']})
+			yield self.request(url=val['url'], callback=self.parse, errback=self.errback, cb_kwargs={'sid': val['sid']})
 
 	def parse(self, response, sid):
+		# fail
+		fail_res = BangumiAnimeFailItem(id=sid, type='anime_scrape')
 		api_res = self.database.read_by_sid('bangumi_anime', sid)
 		# define anime item
 		result = BangumiAnimeScrapeItem(*api_res)
-
 		### JUDGE FAILING SECTION
-		# fail
-		fail_res = BangumiAnimeFailItem(id=result['sid'], type='anime_scrape')
+		# api
+		if api_res == None or result == None or api_res == [] or api_res == {} or 'sid' not in dict(result):
+			fail_res['desc'] = 'sid not found in database, or fetching value failed. please check the api spider.'
+			yield fail_res
+			return
 		# name
 		name = scrapy.Selector(response=response).xpath('//*[@id="headerSubject"]/h1/a/text()').get()
 		# if None then quit
 		if name == None or name == '':
 			fail_res['desc'] = f'name from web page is none. may be 404, please check cookies. \n original response: {response.text}'
-			return fail_res
+			yield fail_res
+			return
 
 		### scraping section
 		try:
@@ -95,3 +98,7 @@ class BangumiAnimeSpider(scrapy.Spider):
 				f'{traceback.format_exc()}'
 			)
 			yield fail_res
+
+	def errback(self, failure):
+		sid = failure.request.cb_kwargs['sid']
+		yield BangumiAnimeFailItem(id=sid, type='anime_scrape', desc=f'Exception caught in errback: \n{repr(failure)}\n Traceback: \n {failure.getTraceback()}')

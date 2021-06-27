@@ -10,12 +10,12 @@ import traceback
 import json
 
 
-class BangumiAnimeSpider(scrapy.Spider):
+class BangumiAnimeAPISpider(scrapy.Spider):
 	name = 'bangumi_anime_api'
 	allowed_domains = [bangumi_settings.BASE_DOMAIN]
 
 	def __init__(self, fail='off', *args, **kwargs):
-		super(BangumiAnimeSpider, self).__init__(*args, **kwargs)
+		super(BangumiAnimeAPISpider, self).__init__(*args, **kwargs)
 		database = BangumiDatabase(database_settings.CONFIG)
 		sid_list = []
 		if fail == 'on': sid_list = database.read_fail_list('anime_api')
@@ -24,11 +24,11 @@ class BangumiAnimeSpider(scrapy.Spider):
 			{'url': f'{bangumi_settings.BASE_API_URL}/subject/{sid}?responseGroup=large', 'sid': sid} for sid in sid_list
 		]
 	
-	def request(self, url, callback, cb_kwargs=None):
+	def request(self, url, callback, errback, cb_kwargs=None):
 		'''
 		warpper for scrapy.request
 		'''
-		request = scrapy.Request(url=url, callback=callback, cb_kwargs=cb_kwargs)
+		request = scrapy.Request(url=url, callback=callback, errback=errback, cb_kwargs=cb_kwargs)
 		cookies = bangumi_settings.COOKIES
 		for key in cookies.keys():
 			request.cookies[key] = cookies[key]
@@ -39,7 +39,7 @@ class BangumiAnimeSpider(scrapy.Spider):
 
 	def start_requests(self):
 		for _, val in enumerate(self.start_values):
-			yield self.request(url=val['url'], callback=self.parse, cb_kwargs={'sid': val['sid']})
+			yield self.request(url=val['url'], callback=self.parse, errback=self.errback, cb_kwargs={'sid': val['sid']})
 
 	def parse(self, response, sid):
 		# define anime item
@@ -51,11 +51,18 @@ class BangumiAnimeSpider(scrapy.Spider):
 		# fail
 		fail_res = BangumiAnimeFailItem(id=result['sid'], type='anime_api')
 		# api request
-		api_res = json.loads(response.text)
+		api_res = {}
+		try:
+			api_res = json.loads(response.text)
+		except:
+			fail_res['desc'] = 'api response format error, cannot convert to json'
+			yield fail_res
+			return
 		# if None then quit
 		if api_res == {} or api_res == None:
 			fail_res['desc'] = 'api response empty'
-			return fail_res
+			yield fail_res
+			return
 		
 		### API SECTION
 		try:
@@ -89,10 +96,13 @@ class BangumiAnimeSpider(scrapy.Spider):
 				f'traceback: \n'
 				f'{traceback.format_exc()}'
 			)
-			return fail_res
+			yield fail_res
+			return
 		
 		### API Episode section
-		eps = api_res['eps']
+		eps = None
+		if 'eps' in api_res.keys():
+			eps = api_res['eps']
 		if eps == None: return
 		for ep in eps:
 			try:
@@ -117,4 +127,8 @@ class BangumiAnimeSpider(scrapy.Spider):
 					f'traceback: \n'
 					f'{traceback.format_exc()}'
 				)
-				return fail_res
+				yield fail_res
+
+	def errback(self, failure):
+		sid = failure.request.cb_kwargs['sid']
+		yield BangumiAnimeFailItem(id=sid, type='anime_api', desc=f'Exception caught in errback: \n{repr(failure)}\n Traceback: \n {failure.getTraceback()}')
