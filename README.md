@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime` (
 	`name_cn`	VARCHAR(200) NOT NULL,	# 中文名 (没有就是原名)
 	`summary`	LONGTEXT,				# 简介
 	`eps_count`	INT,					# 话数
-	`date`		VARCHAR(20),			# 放送开始日期
+	`date`		VARCHAR(200),			# 放送开始日期
 	`weekday`	INT,					# 放送星期
 	`metaHTML`	LONGTEXT,				# 所有属性列表 (HTML)
 	`tags`		LONGTEXT,				# 标签, 空格隔开
@@ -194,8 +194,8 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime_episode` (
 	`type`		INT UNSIGNED NOT NULL,
 	`sort`		INT UNSIGNED NOT NULL,	# 顺序 (当前type中的多少话)
 	`status`	VARCHAR(10) NOT NULL,	# 是否已放送 状态: Air / NA / Today
-	`duration`	VARCHAR(20) NOT NULL,	# 时常, e.g. 24m
-	`date`		VARCHAR(20) NOT NULL,	# 放送日期
+	`duration`	VARCHAR(200) NOT NULL,	# 时常, e.g. 24m
+	`date`		VARCHAR(200) NOT NULL,	# 放送日期
 	`desc`		LONGTEXT,				# 简介
 	PRIMARY KEY ( `eid` ),
 	UNIQUE KEY ( `eid` )
@@ -211,6 +211,15 @@ CREATE TABLE IF NOT EXISTS `request_failed` (
 	UNIQUE KEY ( `id` )
 ) ENGINE=InnoDB CHARSET=utf8
 ```
+
+```sql
+CREATE TABLE IF NOT EXISTS `log` (
+	`time`		VARCHAR(20) NOT NULL,	# 日志时间
+	`content`	LONGTEXT				# 日志内容
+) ENGINE=InnoDB CHARSET=utf8
+```
+
+注：因为一些变态数据，所以`duration`和`date`的长度已调整至200
 
 ## 关于脚本
 
