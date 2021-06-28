@@ -82,6 +82,12 @@ class BangumiDatabase(object):
 			'	UNIQUE KEY ( `id` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
+		cursor.execute(
+			'CREATE TABLE IF NOT EXISTS `log` ('
+			'	`time`		VARCHAR(20) NOT NULL,'
+			'	`content`	LONGTEXT'
+			') ENGINE=InnoDB CHARSET=utf8'
+		)
 		cursor.close()
 
 	def write(self, table: str, values: dict):
@@ -142,6 +148,8 @@ class BangumiDatabase(object):
 
 		self.database.commit()
 		cursor.close()
+
+	# TODO: 删除所有日志, 以及实现CLI, 以及实现删除xxxx时间前的日志
 
 	def close(self):
 		self.database.close()

@@ -5,6 +5,7 @@
 
 
 # useful for handling different item types with a single interface
+from bangumi.items.bangumi_log import BangumiLogItem
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi.config import bangumi_settings
@@ -24,7 +25,6 @@ class BangumiPipeline:
 
 	def process_item(self, item, spider):
 		# define table
-		type = 'fail'
 		if isinstance(item, BangumiIDItem):
 			table = 'bangumi_id'
 			type = 'id'
@@ -47,6 +47,10 @@ class BangumiPipeline:
 			p_id = 'sid'
 		if isinstance(item, BangumiAnimeFailItem):
 			table = 'request_failed'
+			type = 'fail'
+		if isinstance(item, BangumiLogItem):
+			table = 'log'
+			type = 'log'
 		# adjust links
 		values = dict(item)
 		for key in values.keys():
@@ -55,7 +59,7 @@ class BangumiPipeline:
 		# write section
 		self.database.write(table, values)
 		# delete fail if exist
-		if not type == 'fail':
+		if type != 'fail' and type != 'log':
 			self.database.del_fail(type=type, id=item[p_id])
 		return item
 
