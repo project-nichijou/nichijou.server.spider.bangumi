@@ -233,6 +233,21 @@ CREATE TABLE IF NOT EXISTS `log` (
 - `bangumi_anime_api`
 - `bangumi_anime_scrape`
 
+## TODO
+
+- CLI【实现了记得要来README更新】
+  - 命令行使用`subprocess`替代
+  - `fail`重试次数设置
+  - `fail`无限重试
+  - 删除所有日志
+  - 删除截至某一时刻的日志
+- CLI配套`bash`脚本
+- `scrapy`最终结果写入日志
+- `list`报告: `duplicate`总数 + 处理总数
+- `errback`函数格式调整
+- 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
+- 缩略图储存
+
 ## Change log
 
 - [v0.1.0](docs/v0.1.0.md)
