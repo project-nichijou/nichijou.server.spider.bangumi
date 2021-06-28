@@ -67,27 +67,27 @@ class BangumiAnimeAPISpider(scrapy.Spider):
 		### API SECTION
 		try:
 			# name section
-			result['name'] = api_res['name']
-			result['name_cn'] = api_res['name_cn']
+			result['name'] = api_res.get('name')
+			result['name_cn'] = api_res.get('name_cn')
 			yield BangumiAnimeNameItem(sid=result['sid'], name=result['name'])
 			if result['name_cn'] != None and result['name_cn'] != '':
 				yield BangumiAnimeNameItem(sid=result['sid'], name=result['name_cn'])
 			else: result['name_cn'] = result['name']
 			
-			result['summary'] = api_res['summary']
-			result['eps_count'] = api_res['eps_count']
-			result['date'] = api_res['air_date']
-			result['weekday'] = api_res['air_weekday']
-			if api_res['images'] == None: result['image'] = None
+			result['summary'] = api_res.get('summary')
+			result['eps_count'] = api_res.get('eps_count')
+			result['date'] = api_res.get('air_date')
+			result['weekday'] = api_res.get('air_weekday')
+			if api_res.get('images') == None: result['image'] = None
 			else:
 				if 'large' in api_res['images'].keys(): result['image'] = api_res['images']['large']
 				elif 'common' in api_res['images'].keys(): result['image'] = api_res['images']['common']
 				elif 'medium' in api_res['images'].keys(): result['image'] = api_res['images']['medium']
 				elif 'small' in api_res['images'].keys(): result['image'] = api_res['images']['small']
 				elif 'grid' in api_res['images'].keys(): result['image'] = api_res['images']['grid']
-			if api_res['rating'] == None: result['rating'] = None
-			else: result['rating'] = api_res['rating']['score']
-			result['rank'] = api_res['rank']
+			if api_res.get('rating') == None: result['rating'] = None
+			else: result['rating'] = api_res.get('rating').get('score')
+			result['rank'] = api_res.get('rank')
 			yield result
 		except Exception as e:
 			fail_res['desc'] = (
@@ -100,9 +100,7 @@ class BangumiAnimeAPISpider(scrapy.Spider):
 			return
 		
 		### API Episode section
-		eps = None
-		if 'eps' in api_res.keys():
-			eps = api_res['eps']
+		eps = api_res.get('eps')
 		if eps == None: return
 		for ep in eps:
 			try:
