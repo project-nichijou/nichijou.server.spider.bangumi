@@ -53,8 +53,7 @@ class BangumiDatabase(object):
 			'CREATE TABLE IF NOT EXISTS `bangumi_anime_name` ('
 			'	`sid`		INT UNSIGNED NOT NULL,'
 			'	`name`		VARCHAR(200) NOT NULL,'
-			'	PRIMARY KEY ( `name` ),'
-			'	UNIQUE KEY ( `name` )'
+			'	PRIMARY KEY ( `sid`, `name` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
 		cursor.execute(
@@ -78,8 +77,7 @@ class BangumiDatabase(object):
 			'	`id`		INT UNSIGNED NOT NULL,'
 			'	`type`		VARCHAR(20) NOT NULL,'
 			'	`desc`		LONGTEXT,'
-			'	PRIMARY KEY ( `id` ),'
-			'	UNIQUE KEY ( `id` )'
+			'	PRIMARY KEY ( `id`, `type` )'
 			') ENGINE=InnoDB CHARSET=utf8'
 		)
 		cursor.execute(

@@ -181,8 +181,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime` (
 CREATE TABLE IF NOT EXISTS `bangumi_anime_name` (
 	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
 	`name`		VARCHAR(200) NOT NULL,	# 名称
-	PRIMARY KEY ( `name` ),
-	UNIQUE KEY ( `name` )
+	PRIMARY KEY ( `sid`, `name` )
 ) ENGINE=InnoDB CHARSET=utf8
 ```
 
@@ -209,8 +208,7 @@ CREATE TABLE IF NOT EXISTS `request_failed` (
 	`id`		INT UNSIGNED NOT NULL,	# 失败ID
 	`type`		VARCHAR(20) NOT NULL,	# 失败种类
 	`desc`		LONGTEXT,				# 失败信息
-	PRIMARY KEY ( `id` ),
-	UNIQUE KEY ( `id` )
+	PRIMARY KEY ( `id`, `type` )
 ) ENGINE=InnoDB CHARSET=utf8
 ```
 
