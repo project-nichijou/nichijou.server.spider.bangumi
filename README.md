@@ -233,6 +233,15 @@ CREATE TABLE IF NOT EXISTS `log` (
 - `bangumi_anime_api`
 - `bangumi_anime_scrape`
 
+# 一些其他奇奇怪怪的点
+
+- Bangumi自身数据有很大的可能性出问题，包括但不限于
+  - 排行榜数据重复, 看[这里](https://bgm.tv/group/topic/363592), 和[这里](https://gyrojeff.top/index.php/archives/%E6%B5%8B%E8%AF%95%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9B%BE-%E7%88%AC%E5%8F%96%E7%95%AA%E7%BB%84%E8%AE%A1%E5%88%92%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84Bug/)
+  - 官方API返回的数据字段缺失
+  - 数据错误等
+  - 某些奇怪的字段数据过长 (比如`date`, `duration`)
+- 本项目中, `parse`出的所有结果一律使用`yield`, 不得使用`return`, 否则可能会出现无法进入`pipelines`的情况。原因不明，但是本项目中发生过这样有[一个很典型的例子](https://github.com/project-nichijou/bangumi-spider/commit/a1f67cc5fb8c6981802b84a1258e31ddf9a79044)
+
 ## TODO
 
 - CLI【实现了记得要来README更新】
