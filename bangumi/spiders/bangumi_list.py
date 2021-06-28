@@ -17,7 +17,7 @@ class BangumiListSpider(scrapy.Spider):
 	
 	def get_last_page(self):
 		cur_url = self.get_current_url()
-		first_page_html = requests.get(cur_url,headers=bangumi_settings.HEADERS).content.decode('utf-8')
+		first_page_html = requests.get(cur_url,headers=bangumi_settings.HEADERS,cookies=bangumi_settings.COOKIES).content.decode('utf-8')
 		self.last_page=int(re.findall('page=[0-9][0-9]*',first_page_html)[-1][5:])
 		print("last_page:",self.last_page)
 	
@@ -25,13 +25,13 @@ class BangumiListSpider(scrapy.Spider):
 		self.page_var = self.start_page
 		self.get_last_page()
 		if self.last_page:
-			self.start_urls = [self.get_url_from_params(_page=pg) for pg in range(1,self.last_page+1)]
+			self.start_urls = [self.get_url_from_params(page=pg) for pg in range(1,self.last_page+1)]
 		else: self.start_urls=[self.get_current_url()]
 
-	def get_url_from_params(self,_page=None,_type=None):
-		_type = self.type if not _type else _type
-		_page = self.page_var if not _page else _page
-		return f'{bangumi_settings.BASE_URL}/{_type}/browser/?sort=title&page={_page}'
+	def get_url_from_params(self,page=None,type=None):
+		type = self.type if not type else type
+		page = self.page_var if not page else page
+		return f'{bangumi_settings.BASE_URL}/{type}/browser/?sort=title&page={page}'
 
 	def get_current_url(self):
 		return f'{bangumi_settings.BASE_URL}/{self.type}/browser/?sort=title&page={self.page_var}'
