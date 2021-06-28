@@ -4,12 +4,14 @@
 
 - [0x00 Bangumi Spider [Project Nichijou]](#0x00-bangumi-spider-project-nichijou)
 	- [思路与流程](#思路与流程)
-	- [关于数据库](#关于数据库)
 	- [关于爬虫](#关于爬虫)
 	- [环境](#环境)
 	- [配置方法](#配置方法)
 	- [使用方法](#使用方法)
+	- [关于数据库](#关于数据库)
 	- [关于脚本](#关于脚本)
+	- [一些其他奇奇怪怪的点](#一些其他奇奇怪怪的点)
+	- [TODO](#todo)
 	- [Change log](#change-log)
 
 ## 思路与流程
@@ -233,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 - `bangumi_anime_api`
 - `bangumi_anime_scrape`
 
-# 一些其他奇奇怪怪的点
+## 一些其他奇奇怪怪的点
 
 - Bangumi自身数据有很大的可能性出问题，包括但不限于
   - 排行榜数据重复, 看[这里](https://bgm.tv/group/topic/363592), 和[这里](https://gyrojeff.top/index.php/archives/%E6%B5%8B%E8%AF%95%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9B%BE-%E7%88%AC%E5%8F%96%E7%95%AA%E7%BB%84%E8%AE%A1%E5%88%92%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84Bug/)
