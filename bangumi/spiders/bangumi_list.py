@@ -17,15 +17,15 @@ class BangumiListSpider(scrapy.Spider):
 	
 	def get_last_page(self):
 		cur_url = self.get_current_url()
-		first_page_html = requests.get(cur_url,headers=bangumi_settings.HEADERS,cookies=bangumi_settings.COOKIES).content.decode('utf-8')
-		self.last_page=int(re.findall('page=[0-9][0-9]*',first_page_html)[-1][5:])
-		print("last_page:",self.last_page)
+		first_page_html = requests.get(cur_url, headers=bangumi_settings.HEADERS, cookies=bangumi_settings.COOKIES).content.decode('utf-8')
+		self.last_page = int(re.findall('page=[0-9][0-9]*', first_page_html)[-1][5:])
+		print("last_page:", self.last_page)
 	
 	def update_properties(self):
 		self.page_var = self.start_page
 		self.get_last_page()
 		if self.last_page:
-			self.start_urls = [self.get_url_from_params(page=pg) for pg in range(1,self.last_page+1)]
+			self.start_urls = [self.get_url_from_params(page=pg) for pg in range(1, self.last_page + 1)]
 		else: self.start_urls=[self.get_current_url()]
 
 	def get_url_from_params(self,page=None,type=None):
