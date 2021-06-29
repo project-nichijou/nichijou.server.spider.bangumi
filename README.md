@@ -117,47 +117,61 @@ scrapy crawl bangumi_anime -a fail=off
 
 或者也可以使用CLI命令：
 
-```
-python3 main.py
-Usage: main.py [OPTIONS] COMMAND [ARGS]...
+- 主命令
+	```
+	python3 main.py 
+	Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
-Options:
-  --help  Show this message and exit.
+	Options:
+	--help  Show this message and exit.
 
-Commands:
-  crawl   start SPIDER crawling using scrapy
-  dellog  delete loggings in the database.
-  initdb  init bangumi database
-```
+	Commands:
+	crawl       start SPIDER crawling using scrapy
+	dellog      delete loggings in the database.
+	initdb      init bangumi database
+	setcookies  set cookies of bangumi
+	```
+- `crawl`
+	```
+	python3 main.py crawl --help
+	Usage: main.py crawl [OPTIONS] SPIDER
 
-```
-python3 main.py crawl --help
-Usage: main.py crawl [OPTIONS] SPIDER
+	start SPIDER crawling using scrapy
 
-  start SPIDER crawling using scrapy
+	SPIDER: name of the spider to start
 
-  SPIDER: name of the spider to start
+	Options:
+	--fail INTEGER  time of retrying for failed items. default is 0, when the
+					value is negative, retrying won't stop unless the table
+					`request_failed` is empty. Note: this parameter is not
+					available for all spiders, only for `bangumi_anime_api`,
+					`bangumi_anime_scrape`.
+	--help          Show this message and exit.
+	```
+- `dellog`
+	```
+	python3 main.py dellog --help
+	Usage: main.py dellog [OPTIONS]
 
-Options:
-  --fail INTEGER  time of retrying for failed items. default is 0, when the
-                  value is negative, retrying won't stop unless the table
-                  `request_failed` is empty. Note: this parameter is not
-                  available for all spiders, only for `bangumi_anime_api`,
-                  `bangumi_anime_scrape`.
-  --help          Show this message and exit.
-```
+	delete loggings in the database.
 
-```
-python3 main.py dellog --help
-Usage: main.py dellog [OPTIONS]
+	Options:
+	--before TEXT  delete the loggings which are before the time in the
+					database. default is None, which means delete all.
+	--help         Show this message and exit.
+	```
+- `setcookies`
+	```
+	python3 main.py setcookies --help
+	Usage: main.py setcookies [OPTIONS] COOKIES
 
-  delete loggings in the database.
+	set cookies of bangumi
 
-Options:
-  --before TEXT  delete the loggings which are before the time in the
-                 database. default is None, which means delete all.
-  --help         Show this message and exit.
-```
+	COOKIES: dictionary of cookies (converted to str)
+
+	Options:
+	--help  Show this message and exit.
+	```
 
 ## 关于数据库
 
@@ -273,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   - [x] `fail`无限重试
   - [x] 删除所有日志
   - [x] 删除截至某一时刻的日志
-  - [ ] 设置Cookies
+  - [x] 设置Cookies
 - [x] CLI配套`bash`脚本
 - [ ] `scrapy`最终结果写入日志
 - [ ] `list`报告: `duplicate`总数 + 处理总数

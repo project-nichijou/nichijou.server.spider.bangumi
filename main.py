@@ -1,7 +1,9 @@
 import subprocess
+from bangumi.tools import bangumi_cookies
 from bangumi.database.bangumi_database import BangumiDatabase
 from bangumi.database import database_settings
 import click
+import json
 
 
 @click.group()
@@ -61,6 +63,17 @@ def dellog(before: str):
 		db.del_log_all()
 	else:
 		db.del_log_till(before)
+
+
+@cli.command()
+@click.argument('cookies')
+def setcookies(cookies: str):
+	'''
+	set cookies of bangumi
+
+	COOKIES: dictionary of cookies (converted to str)
+	'''
+	bangumi_cookies.write_cookies(json.loads(cookies))
 
 
 @cli.command()
