@@ -136,8 +136,10 @@ Usage: main.py crawl [OPTIONS] SPIDER
   SPIDER: name of the spider to start
 
 Options:
-  --fail  whether start in fail mode
-  --help  Show this message and exit.
+  --fail INTEGER  time of retrying for failed items. default is 0, when the
+                  value is negative, retrying won't stop unless the table
+                  `request_failed` is empty
+  --help          Show this message and exit.
 ```
 
 ## 关于数据库
@@ -247,17 +249,17 @@ CREATE TABLE IF NOT EXISTS `log` (
 ## TODO
 
 - CLI【实现了记得要来README更新】
-  - 命令行使用`subprocess`替代
-  - `fail`重试次数设置
-  - `fail`无限重试
-  - 删除所有日志
-  - 删除截至某一时刻的日志
-- CLI配套`bash`脚本
-- `scrapy`最终结果写入日志
-- `list`报告: `duplicate`总数 + 处理总数
-- `errback`函数格式调整
-- 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
-- 缩略图储存
+  - [x] 命令行使用`subprocess`替代
+  - [x] `fail`重试次数设置
+  - [x] `fail`无限重试
+  - [ ] 删除所有日志
+  - [ ] 删除截至某一时刻的日志
+- [ ] CLI配套`bash`脚本
+- [ ] `scrapy`最终结果写入日志
+- [ ] `list`报告: `duplicate`总数 + 处理总数
+- [ ] `errback`函数格式调整
+- [ ] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
+- [ ] 缩略图储存
 
 ## Change log
 
