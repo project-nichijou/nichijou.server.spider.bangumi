@@ -156,8 +156,9 @@ scrapy crawl bangumi_anime -a fail=off
 	delete loggings in the database.
 
 	Options:
-	--before TEXT  delete the loggings which are before the time in the
-					database. default is None, which means delete all.
+	--before TEXT  delete the loggings which are before the time in the   
+					database. default is None, which means delete all. data
+					format: YYYY-MM-DD hh:mm:ss
 	--help         Show this message and exit.
 	```
 - `setcookies`
