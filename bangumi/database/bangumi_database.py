@@ -1,6 +1,8 @@
 import mysql.connector
 import copy
 
+from mysql.connector import cursor
+
 class BangumiDatabase(object):
 	
 	def __init__(self, config):
@@ -147,7 +149,23 @@ class BangumiDatabase(object):
 		self.database.commit()
 		cursor.close()
 
-	# TODO: 删除所有日志, 以及实现CLI, 以及实现删除xxxx时间前的日志
+	def del_log_all(self):
+		cursor = self.database.cursor()
+
+		delete = 'TRUNCATE `log`'
+		cursor.execute(delete)
+		
+		self.database.commit()
+		cursor.close()
+	
+	def del_log_till(self, time: str):
+		cursor = self.database.cursor()
+
+		delete = f'DELETE FROM `log` WHERE `time` <= {repr(time)}'
+		cursor.execute(delete)
+		
+		self.database.commit()
+		cursor.close()
 
 	def close(self):
 		self.database.close()

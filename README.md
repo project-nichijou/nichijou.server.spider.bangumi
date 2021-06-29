@@ -116,7 +116,7 @@ scrapy crawl bangumi_anime -a fail=off
 或者也可以使用CLI命令：
 
 ```
-python3 main.py 
+python3 main.py
 Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
 Options:
@@ -124,6 +124,7 @@ Options:
 
 Commands:
   crawl   start SPIDER crawling using scrapy
+  dellog  delete loggings in the database.
   initdb  init bangumi database
 ```
 
@@ -140,6 +141,18 @@ Options:
                   value is negative, retrying won't stop unless the table
                   `request_failed` is empty
   --help          Show this message and exit.
+```
+
+```
+python3 main.py dellog --help
+Usage: main.py dellog [OPTIONS]
+
+  delete loggings in the database.
+
+Options:
+  --before TEXT  delete the loggings which are before the time in the
+                 database. default is None, which means delete all.
+  --help         Show this message and exit.
 ```
 
 ## 关于数据库
@@ -252,8 +265,8 @@ CREATE TABLE IF NOT EXISTS `log` (
   - [x] 命令行使用`subprocess`替代
   - [x] `fail`重试次数设置
   - [x] `fail`无限重试
-  - [ ] 删除所有日志
-  - [ ] 删除截至某一时刻的日志
+  - [x] 删除所有日志
+  - [x] 删除截至某一时刻的日志
 - [ ] CLI配套`bash`脚本
 - [ ] `scrapy`最终结果写入日志
 - [ ] `list`报告: `duplicate`总数 + 处理总数
