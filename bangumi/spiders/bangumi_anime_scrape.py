@@ -101,4 +101,9 @@ class BangumiAnimeScrapeSpider(scrapy.Spider):
 
 	def errback(self, failure):
 		sid = failure.request.cb_kwargs['sid']
-		yield BangumiAnimeFailItem(id=sid, type='anime_scrape', desc=f'Exception caught in errback: \n{repr(failure)}\n Traceback: \n {failure.getTraceback()}')
+		yield BangumiAnimeFailItem(id=sid, type='anime_scrape', desc=(
+			'exception caught in errback: \n'
+			f'{repr(failure)} \n'
+			f'traceback: \n'
+			f'{failure.getTraceback()}'
+		))

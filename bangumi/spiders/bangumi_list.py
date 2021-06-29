@@ -118,4 +118,10 @@ class BangumiListSpider(scrapy.Spider):
 
 	def errback(self, failure):
 		page = failure.request.cb_kwargs['page']
-		yield BangumiLogItem.create(content=f'Exception caught in errback of bangumi_list: \n{repr(failure)}\n Traceback: \n {failure.getTraceback()} \n page: {page}')
+		yield BangumiLogItem.create(content=(
+			f'exception caught in errback of bangumi_list: \n'
+			f'{repr(failure)} \n'
+			f'traceback: \n'
+			f'{failure.getTraceback()} \n'
+			f'page: {page}'
+		))

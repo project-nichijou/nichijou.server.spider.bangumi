@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 - [x] CLI配套`bash`脚本
 - [ ] `scrapy`最终结果写入日志
 - [ ] `list`报告: `duplicate`总数 + 处理总数
-- [ ] `errback`函数格式调整
+- [x] `errback`函数格式调整
 - [ ] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
 - [ ] 缩略图储存
 
