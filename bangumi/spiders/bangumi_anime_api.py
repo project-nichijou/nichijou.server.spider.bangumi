@@ -92,9 +92,9 @@ class BangumiAnimeAPISpider(scrapy.Spider):
 		except Exception as e:
 			fail_res['desc'] = (
 				'exception caught when handling API fields. \n'
-				f'exception info: {repr(e)} \n'
-				f'traceback: \n'
-				f'{traceback.format_exc()}'
+				f' exception info: {repr(e)} \n'
+				f' traceback: \n'
+				f' {traceback.format_exc()}'
 			)
 			yield fail_res
 			return
@@ -121,9 +121,9 @@ class BangumiAnimeAPISpider(scrapy.Spider):
 			except Exception as e:
 				fail_res['desc'] = (
 					'exception caught when handling episodes in API. \n'
-					f'exception info: {repr(e)} \n'
-					f'traceback: \n'
-					f'{traceback.format_exc()}'
+					f' exception info: {repr(e)} \n'
+					f' traceback: \n'
+					f' {traceback.format_exc()}'
 				)
 				yield fail_res
 
@@ -131,7 +131,7 @@ class BangumiAnimeAPISpider(scrapy.Spider):
 		sid = failure.request.cb_kwargs['sid']
 		yield BangumiAnimeFailItem(id=sid, type='anime_api', desc=(
 			'exception caught in errback: \n'
-			f'{repr(failure)} \n'
-			f'traceback: \n'
-			f'{failure.getTraceback()}'
+			f' {repr(failure)} \n'
+			f' traceback: \n'
+			f' {failure.getTraceback()}'
 		))

@@ -92,9 +92,9 @@ class BangumiListSpider(scrapy.Spider):
 					f' type: {self.type} \n'
 					f' page: {page} \n'
 					f' sid: {result["sid"]} \n'
-					f'exception info: {repr(e)} \n'
-					f'traceback: \n'
-					f'{traceback.format_exc()}'
+					f' exception info: {repr(e)} \n'
+					f' traceback: \n'
+					f' {traceback.format_exc()}'
 				))
 				yield log_res
 		
@@ -120,8 +120,8 @@ class BangumiListSpider(scrapy.Spider):
 		page = failure.request.cb_kwargs['page']
 		yield BangumiLogItem.create(content=(
 			f'exception caught in errback of bangumi_list: \n'
-			f'{repr(failure)} \n'
-			f'traceback: \n'
-			f'{failure.getTraceback()} \n'
-			f'page: {page}'
+			f' {repr(failure)} \n'
+			f' traceback: \n'
+			f' {failure.getTraceback()} \n'
+			f' page: {page}'
 		))

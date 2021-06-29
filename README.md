@@ -273,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 - [ ] `scrapy`最终结果写入日志
 - [ ] `list`报告: `duplicate`总数 + 处理总数
 - [x] `errback`函数格式调整
-- [ ] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
+- [x] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
 - [ ] 缩略图储存
 
 ## Change log
