@@ -1,3 +1,4 @@
+from bangumi.tools import bangumi_cookies
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
 from bangumi.items.bangumi_anime import BangumiAnimeScrapeItem
@@ -27,7 +28,7 @@ class BangumiAnimeScrapeSpider(scrapy.Spider):
 		warpper for scrapy.request
 		'''
 		request = scrapy.Request(url=url, callback=callback, errback=errback, cb_kwargs=cb_kwargs)
-		cookies = bangumi_settings.COOKIES
+		cookies = bangumi_cookies.read_cookies()
 		for key in cookies.keys():
 			request.cookies[key] = cookies[key]
 		headers = bangumi_settings.HEADERS
@@ -40,6 +41,10 @@ class BangumiAnimeScrapeSpider(scrapy.Spider):
 			yield self.request(url=val['url'], callback=self.parse, errback=self.errback, cb_kwargs={'sid': val['sid']})
 
 	def parse(self, response, sid):
+		# Update cookies
+		cookies = response.headers.getlist('Set-Cookie')
+		bangumi_cookies.update_cookies(cookies)
+
 		# fail
 		fail_res = BangumiAnimeFailItem(id=sid, type='anime_scrape')
 		api_res = self.database.read_by_sid('bangumi_anime', sid)

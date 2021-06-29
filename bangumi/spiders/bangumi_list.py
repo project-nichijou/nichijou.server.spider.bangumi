@@ -1,3 +1,4 @@
+from bangumi.tools import bangumi_cookies
 from bangumi.items.bangumi_log import BangumiLogItem
 from bangumi.config import bangumi_settings
 from bangumi.items.bangumi_id import BangumiIDItem
@@ -27,7 +28,7 @@ class BangumiListSpider(scrapy.Spider):
 	
 	def get_last_page(self):
 		cur_url = self.get_url()
-		first_page_html = requests.get(cur_url, headers=bangumi_settings.HEADERS, cookies=bangumi_settings.COOKIES).content.decode('utf-8')
+		first_page_html = requests.get(cur_url, headers=bangumi_settings.HEADERS, cookies=bangumi_cookies.read_cookies()).content.decode('utf-8')
 		self.last_page = int(re.findall('page=[0-9][0-9]*', first_page_html)[-1][5:])
 		print("last_page:", self.last_page)
 
@@ -36,7 +37,7 @@ class BangumiListSpider(scrapy.Spider):
 		warpper for scrapy.request
 		'''
 		request = scrapy.Request(url=url, callback=callback, errback=errback, cb_kwargs=cb_kwargs)
-		cookies = bangumi_settings.COOKIES
+		cookies = bangumi_cookies.read_cookies()
 		for key in cookies.keys():
 			request.cookies[key] = cookies[key]
 		headers = bangumi_settings.HEADERS
@@ -54,6 +55,10 @@ class BangumiListSpider(scrapy.Spider):
 		return f'{bangumi_settings.BASE_URL}/{type}/browser/?sort=title&page={page}'
 
 	def parse(self, response, page):
+		# Update cookies
+		cookies = response.headers.getlist('Set-Cookie')
+		bangumi_cookies.update_cookies(cookies)
+		
 		# //*[@id="browserItemList"]/li
 		item_list = scrapy.Selector(response=response).xpath('//*[@id="browserItemList"]/li')
 		# if empty then return

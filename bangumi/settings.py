@@ -50,9 +50,9 @@ ROBOTSTXT_OBEY = False # Because we need to crawl the mirror sites (they are usi
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'bangumi.middlewares.BangumiDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'bangumi.middlewares.BangumiDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

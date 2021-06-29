@@ -75,13 +75,13 @@ pip3 install -r requirements.txt
 
 本项目有两个配置文件：
 - `bangumi/config/bangumi_settings.py`
-- `bangumi/database/database_settings.py`
+- `cookies.json`
 
 可以发现这两个文件在本`repo`中只有`_template`，需要将这两个`template`配置好并复制、重命名。
 
 关于配置字段的具体含义，文件中都有注释，可以自行查阅。
 
-注意：`bangumi_settings`中的`COOKIES`在某些情况下需要以下字段，~~否则无法爬取特殊内容~~:
+注意：`cookies.json`中的`cookies`在某些情况下需要以下字段 (已经写在`template`当中了)，~~否则无法爬取特殊内容~~:
 
 ```
 {
@@ -90,6 +90,8 @@ pip3 install -r requirements.txt
 	"chii_sid": <value>
 }
 ```
+
+注意：`chii_sid`由于会被Bangumi定期替换，所以可能会被自动更新。当然，这一特性也有可能失效，毕竟我们只能停留在对机制的猜测阶段。
 
 ## 使用方法
 
