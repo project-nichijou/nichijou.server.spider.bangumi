@@ -300,3 +300,4 @@ CREATE TABLE IF NOT EXISTS `log` (
 ## Change log
 
 - [v0.1.0](docs/v0.1.0.md)
+- [v0.2.0](docs/v0.2.0.md)
