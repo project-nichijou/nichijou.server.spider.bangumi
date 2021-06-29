@@ -139,7 +139,9 @@ Usage: main.py crawl [OPTIONS] SPIDER
 Options:
   --fail INTEGER  time of retrying for failed items. default is 0, when the
                   value is negative, retrying won't stop unless the table
-                  `request_failed` is empty
+                  `request_failed` is empty. Note: this parameter is not
+                  available for all spiders, only for `bangumi_anime_api`,
+                  `bangumi_anime_scrape`.
   --help          Show this message and exit.
 ```
 

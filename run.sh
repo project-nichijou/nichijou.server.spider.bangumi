@@ -20,7 +20,7 @@ DIR="$( cd -P "$( dirname "$SOURCE"  )" && pwd  )"
 cd $DIR
 
 ### run spiders
-python3 main.py crawl bangumi_anime_list --fail=2
+python3 main.py crawl bangumi_anime_list
 python3 main.py crawl bangumi_anime_api --fail=2
 python3 main.py crawl bangumi_anime_scrape --fail=2
 

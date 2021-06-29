@@ -11,7 +11,7 @@ def cli():
 
 @cli.command()
 @click.argument('spider')
-@click.option('--fail', type=int, default=0, help='time of retrying for failed items. default is 0, when the value is negative, retrying won\'t stop unless the table `request_failed` is empty')
+@click.option('--fail', type=int, default=0, help='time of retrying for failed items. default is 0, when the value is negative, retrying won\'t stop unless the table `request_failed` is empty. Note: this parameter is not available for all spiders, only for `bangumi_anime_api`, `bangumi_anime_scrape`.')
 def crawl(spider: str, fail: int):
 	'''
 	start SPIDER crawling using scrapy
