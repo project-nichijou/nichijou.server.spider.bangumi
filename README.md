@@ -85,7 +85,9 @@ pip3 install -r requirements.txt
 
 ```
 {
-	"chii_auth": <value>
+	"chii_auth": <value>,
+	"chii_sec_id": <value>,
+	"chii_sid": <value>
 }
 ```
 
