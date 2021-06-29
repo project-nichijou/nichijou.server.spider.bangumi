@@ -20,9 +20,9 @@ DIR="$( cd -P "$( dirname "$SOURCE"  )" && pwd  )"
 cd $DIR
 
 ### run spiders
-scrapy crawl bangumi_anime_list
-scrapy crawl bangumi_anime_api
-scrapy crawl bangumi_anime_scrape
+python3 main.py crawl bangumi_anime_list --fail=2
+python3 main.py crawl bangumi_anime_api --fail=2
+python3 main.py crawl bangumi_anime_scrape --fail=2
 
 ### go back to the original directory
 cd $CURRENT_DIR

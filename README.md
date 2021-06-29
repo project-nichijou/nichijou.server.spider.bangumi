@@ -250,6 +250,8 @@ CREATE TABLE IF NOT EXISTS `log` (
 - `bangumi_anime_api`
 - `bangumi_anime_scrape`
 
+失败重试的次数设置为了两次，可以自行调整。
+
 ## 一些其他奇奇怪怪的点
 
 - Bangumi自身数据有很大的可能性出问题，包括但不限于
@@ -267,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   - [x] `fail`无限重试
   - [x] 删除所有日志
   - [x] 删除截至某一时刻的日志
-- [ ] CLI配套`bash`脚本
+- [x] CLI配套`bash`脚本
 - [ ] `scrapy`最终结果写入日志
 - [ ] `list`报告: `duplicate`总数 + 处理总数
 - [ ] `errback`函数格式调整
