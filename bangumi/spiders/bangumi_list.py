@@ -56,8 +56,8 @@ class BangumiListSpider(scrapy.Spider):
 
 	def parse(self, response, page):
 		# Update cookies
-		cookies = response.headers.getlist('Set-Cookie')
-		bangumi_cookies.update_cookies(cookies)
+		# cookies = response.headers.getlist('Set-Cookie')
+		# bangumi_cookies.update_cookies(cookies)
 		
 		# //*[@id="browserItemList"]/li
 		item_list = scrapy.Selector(response=response).xpath('//*[@id="browserItemList"]/li')

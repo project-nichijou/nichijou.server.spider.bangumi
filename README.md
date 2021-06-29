@@ -273,12 +273,14 @@ CREATE TABLE IF NOT EXISTS `log` (
   - [x] `fail`无限重试
   - [x] 删除所有日志
   - [x] 删除截至某一时刻的日志
+  - [ ] 设置Cookies
 - [x] CLI配套`bash`脚本
 - [ ] `scrapy`最终结果写入日志
 - [ ] `list`报告: `duplicate`总数 + 处理总数
 - [x] `errback`函数格式调整
 - [x] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
 - [ ] 缩略图储存
+- [ ] 解决Cookies爆炸问题
 
 ## Change log
 
