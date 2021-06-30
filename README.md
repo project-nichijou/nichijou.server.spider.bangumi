@@ -296,6 +296,13 @@ CREATE TABLE IF NOT EXISTS `log` (
 - [x] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
 - [ ] 缩略图储存
 - [ ] 解决Cookies爆炸问题
+- [ ] 引入私有缓存机制
+  - [ ] 设置：各类数据的过期时间
+  - [ ] 新建缓存数据库
+  - [ ] 为`request_failed`新建`url`字段
+  - [ ] 使用`status code`以及`failed`共同决定是否缓存
+  - [ ] 使用`pickle`进行对象持久化
+  - [ ] `process_request`, `process_response`重写
 
 ## Change log
 
