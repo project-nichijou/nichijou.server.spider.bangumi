@@ -40,10 +40,6 @@ class BangumiAnimeScrapeSpider(scrapy.Spider):
 			yield self.request(url=val['url'], callback=self.parse, errback=self.errback, cb_kwargs={'sid': val['sid']})
 
 	def parse(self, response, sid):
-		# Update cookies
-		# cookies = response.headers.getlist('Set-Cookie')
-		# bangumi_cookies.update_cookies(cookies)
-
 		# fail
 		fail_res = BangumiAnimeFailItem(id=sid, type='anime_scrape')
 		api_res = self.database.read_by_sid('bangumi_anime', sid)

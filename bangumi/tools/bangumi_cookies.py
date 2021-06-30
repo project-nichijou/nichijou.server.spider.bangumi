@@ -1,3 +1,4 @@
+from http.cookiejar import Cookie
 import json
 import re
 
@@ -19,3 +20,6 @@ def update_cookies(cookies):
 			new_cookies = read_cookies()
 			new_cookies['chii_sid'] = matched[0][9:-1]
 			write_cookies(new_cookies)
+
+def cookie_to_dict(cookie: Cookie):
+	return cookie.__dict__

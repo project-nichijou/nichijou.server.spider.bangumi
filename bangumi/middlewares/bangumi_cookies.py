@@ -1,3 +1,4 @@
+from bangumi.spiders.bangumi_anime_scrape import BangumiAnimeScrapeSpider
 from bangumi.config import bangumi_settings
 from scrapy.http.cookies import CookieJar
 from bangumi.tools import bangumi_cookies
@@ -7,6 +8,7 @@ from scrapy.utils.python import to_unicode
 from scrapy import signals
 import logging
 import requests
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +31,9 @@ class BangumiCookiesMiddleware:
 		# middleware.
 		if request.meta.get('dont_merge_cookies', False):
 			return
+		# judge type of spider
+		if not isinstance(spider, BangumiAnimeScrapeSpider):
+			return
 		cookies_dict = requests.utils.dict_from_cookiejar(self.jar)
 		if cookies_dict == {} or cookies_dict == None:
 			for cookie in self._get_request_cookies(self.jar, request):
@@ -38,6 +43,8 @@ class BangumiCookiesMiddleware:
 		request.headers.pop('Cookie', None)
 		self.jar.add_cookie_header(request)
 		self._debug_cookie(request, spider)
+		# for cookie in self.jar:
+		# 	print(bangumi_cookies.cookie_to_dict(cookie))
 		# Must either:
 		# - return None: continue processing this request
 		# - or return a Response object
@@ -50,13 +57,18 @@ class BangumiCookiesMiddleware:
 		# Called with the response returned from the downloader.
 		if request.meta.get('dont_merge_cookies', False):
 			return response
+		# judge type of spider
+		if not isinstance(spider, BangumiAnimeScrapeSpider):
+			return response
 		# extract cookies from Set-Cookie and drop invalid/expired cookies
 		self.jar.extract_cookies(response, request)
 		self._debug_set_cookie(response, spider)
 		# Write cookies
 		if bangumi_settings.COOKIES_AUTO_UPDATE:
-			bangumi_cookies.write_cookies(requests.utils.dict_from_cookiejar(self.jar))
-		# bangumi_cookies.write_cookies(requests.utils.dict_from_cookiejar(self.jar))
+			cookies = []
+			for cookie in self.jar:
+				cookies.append(bangumi_cookies.cookie_to_dict(cookie))
+			bangumi_cookies.write_cookies(cookies)
 		# Must either;
 		# - return a Response object
 		# - return a Request object

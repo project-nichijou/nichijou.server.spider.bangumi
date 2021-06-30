@@ -28,7 +28,7 @@ class BangumiListSpider(scrapy.Spider):
 	
 	def get_last_page(self):
 		cur_url = self.get_url()
-		first_page_html = requests.get(cur_url, headers=bangumi_settings.HEADERS, cookies=bangumi_cookies.read_cookies()).content.decode('utf-8')
+		first_page_html = requests.get(cur_url, headers=bangumi_settings.HEADERS).content.decode('utf-8')
 		self.last_page = int(re.findall('page=[0-9][0-9]*', first_page_html)[-1][5:])
 		print("last_page:", self.last_page)
 
