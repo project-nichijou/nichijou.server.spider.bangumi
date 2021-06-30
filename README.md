@@ -93,6 +93,34 @@ pip3 install -r requirements.txt
 
 注意：`chii_sid`由于会被Bangumi定期替换，所以我们手动实现了`cookies`变更持久化。当然，即便这样我们在爬取的时候还是有可能失效，毕竟我们只能停留在对机制的猜测阶段。是否开启`cookies`持久化可以在`bangumi/config/bangumi_settings.py`中的`COOKIES_AUTO_UPDATE`当中设置。如果开启，建议复制一份`cookies.json`保存为`cookies.json.backup`，因为文件会被复写，备份以便不时之需。
 
+注意 (~~怎么又来了~~)：**关于`cookies.json`的格式**：支持`list`和`dict`的两种格式。
+
+上面的是`dict`，下面的是`list`举例：
+
+```json
+[
+	{
+		"domain": ".bgm.tv",
+		"expirationDate": 1627660426.06073,
+		"hostOnly": false,
+		"httpOnly": false,
+		"name": "chii_auth",
+		"path": "/",
+		"sameSite": "unspecified",
+		"secure": false,
+		"session": false,
+		"storeId": "0",
+		"value": "<value>",
+		"id": 1
+	},
+	// 略...
+]
+```
+
+推荐使用`list`配置`cookies.json`，不容易抽风。方法：可以使用类似于[EditThisCookie](https://www.editthiscookie.com/)的插件进行导出，见下图。
+
+![EditThisCookie](imgs/cookies.png)
+
 ## 使用方法
 
 经过考量，不准备使用`scrapyd`或者写启动服务器之类的功能，这里只提供了可以用于定时执行的脚本以及`main.py`的CLI工具。我们计划在以后统一实现后端整个工作流的控制管理，不在这里单一实现。目前，可以直接通过以下命令启动爬虫：
