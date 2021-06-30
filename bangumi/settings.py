@@ -31,7 +31,8 @@ ROBOTSTXT_OBEY = False # Because we need to crawl the mirror sites (they are usi
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = True
+COOKIES_DEBUG = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -51,7 +52,8 @@ ROBOTSTXT_OBEY = False # Because we need to crawl the mirror sites (they are usi
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'bangumi.middlewares.BangumiDownloaderMiddleware': 543,
+	'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': None,
+    'bangumi.middlewares.bangumi_cookies.BangumiCookiesMiddleware': 920,
 }
 
 # Enable or disable extensions

@@ -81,7 +81,7 @@ pip3 install -r requirements.txt
 
 关于配置字段的具体含义，文件中都有注释，可以自行查阅。
 
-注意：`cookies.json`中的`cookies`在某些情况下需要以下字段 (已经写在`template`当中了)，~~否则无法爬取特殊内容~~:
+注意：`cookies.json`中的`cookies`在某些情况下需要以下字段 (已经写在`template`当中了)，~~否则无法爬取特殊内容~~，但是我们仍然建议把整个`cookies`都复制进来:
 
 ```
 {
@@ -91,7 +91,7 @@ pip3 install -r requirements.txt
 }
 ```
 
-注意：`chii_sid`由于会被Bangumi定期替换，所以可能会被自动更新。当然，这一特性也有可能失效，毕竟我们只能停留在对机制的猜测阶段。
+注意：`chii_sid`由于会被Bangumi定期替换，所以我们手动实现了`cookies`变更持久化。当然，即便这样我们在爬取的时候还是有可能失效，毕竟我们只能停留在对机制的猜测阶段。是否开启`cookies`持久化可以在`bangumi/config/bangumi_settings.py`中的`COOKIES_AUTO_UPDATE`当中设置。
 
 ## 使用方法
 
@@ -295,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 - [x] `errback`函数格式调整
 - [x] 数据库异常处理, 继续入数据库【递归啦 奇奇怪怪】
 - [ ] 缩略图储存
-- [ ] 解决Cookies爆炸问题
+- [x] 解决Cookies爆炸问题【尽力了，维护了私有cookies缓存机制】
 - [ ] 引入私有缓存机制
   - [ ] 设置：各类数据的过期时间
   - [ ] 新建缓存数据库

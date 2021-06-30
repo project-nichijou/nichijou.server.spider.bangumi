@@ -8,7 +8,7 @@ def read_cookies():
 			return json.load(f)
 	except: return {}
 
-def write_cookies(cookies: dict):
+def write_cookies(cookies):
 	json.dump(cookies, open('cookies.json', 'w', encoding='utf-8'))
 
 def update_cookies(cookies):

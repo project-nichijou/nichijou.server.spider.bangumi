@@ -37,9 +37,7 @@ class BangumiListSpider(scrapy.Spider):
 		warpper for scrapy.request
 		'''
 		request = scrapy.Request(url=url, callback=callback, errback=errback, cb_kwargs=cb_kwargs)
-		cookies = bangumi_cookies.read_cookies()
-		for key in cookies.keys():
-			request.cookies[key] = cookies[key]
+		request.cookies = bangumi_cookies.read_cookies()
 		headers = bangumi_settings.HEADERS
 		for key in headers.keys():
 			request.headers[key] = headers[key]

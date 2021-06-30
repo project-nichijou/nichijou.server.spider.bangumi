@@ -1,3 +1,4 @@
+from scrapy.http.cookies import CookieJar
 from bangumi.tools import bangumi_cookies
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
 from bangumi.items.bangumi_anime_fail import BangumiAnimeFailItem
@@ -28,9 +29,7 @@ class BangumiAnimeScrapeSpider(scrapy.Spider):
 		warpper for scrapy.request
 		'''
 		request = scrapy.Request(url=url, callback=callback, errback=errback, cb_kwargs=cb_kwargs)
-		cookies = bangumi_cookies.read_cookies()
-		for key in cookies.keys():
-			request.cookies[key] = cookies[key]
+		request.cookies = bangumi_cookies.read_cookies()
 		headers = bangumi_settings.HEADERS
 		for key in headers.keys():
 			request.headers[key] = headers[key]
