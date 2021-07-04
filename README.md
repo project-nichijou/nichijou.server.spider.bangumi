@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_id` (
 	`name_cn`	VARCHAR(200) NOT NULL,	# 中文名 (没有就是原名)
 	PRIMARY KEY ( `sid` ),
 	UNIQUE KEY ( `sid` )
-) ENGINE=InnoDB CHARSET=utf8
+) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime` (
 	`rank`		INT,					# 站内排名
 	PRIMARY KEY ( `sid` ),
 	UNIQUE KEY ( `sid` )
-) ENGINE=InnoDB CHARSET=utf8
+) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime_name` (
 	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
 	`name`		VARCHAR(200) NOT NULL,	# 名称
 	PRIMARY KEY ( `sid`, `name` )
-) ENGINE=InnoDB CHARSET=utf8
+) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime_episode` (
 	`desc`		LONGTEXT,				# 简介
 	PRIMARY KEY ( `eid` ),
 	UNIQUE KEY ( `eid` )
-) ENGINE=InnoDB CHARSET=utf8
+) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
@@ -274,14 +274,14 @@ CREATE TABLE IF NOT EXISTS `request_failed` (
 	`type`		VARCHAR(20) NOT NULL,	# 失败种类
 	`desc`		LONGTEXT,				# 失败信息
 	PRIMARY KEY ( `id`, `type` )
-) ENGINE=InnoDB CHARSET=utf8
+) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
 CREATE TABLE IF NOT EXISTS `log` (
 	`time`		VARCHAR(20) NOT NULL,	# 日志时间
 	`content`	LONGTEXT				# 日志内容
-) ENGINE=InnoDB CHARSET=utf8
+) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 注：因为一些变态数据，所以`duration`和`date`的长度已调整至200
