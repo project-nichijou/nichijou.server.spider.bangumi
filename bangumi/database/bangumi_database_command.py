@@ -7,7 +7,7 @@ CREATE_TABLE_BANGUMI_ID = (
 	'	`name_cn`	VARCHAR(200) NOT NULL,'
 	'	PRIMARY KEY ( `sid` ),'
 	'	UNIQUE KEY ( `sid` )'
-	') ENGINE=InnoDB CHARSET=utf8'
+	') ENGINE=InnoDB CHARSET=utf8mb4'
 )
 
 CREATE_TABLE_BANGUMI_ANIME = (
@@ -27,7 +27,7 @@ CREATE_TABLE_BANGUMI_ANIME = (
 	'	`rank`		INT,'
 	'	PRIMARY KEY ( `sid` ),'
 	'	UNIQUE KEY ( `sid` )'
-	') ENGINE=InnoDB CHARSET=utf8'
+	') ENGINE=InnoDB CHARSET=utf8mb4'
 )
 
 CREATE_TABLE_BANGUMI_ANIME_NAME = (
@@ -35,7 +35,7 @@ CREATE_TABLE_BANGUMI_ANIME_NAME = (
 	'	`sid`		INT UNSIGNED NOT NULL,'
 	'	`name`		VARCHAR(200) NOT NULL,'
 	'	PRIMARY KEY ( `sid`, `name` )'
-	') ENGINE=InnoDB CHARSET=utf8'
+	') ENGINE=InnoDB CHARSET=utf8mb4'
 )
 
 CREATE_TABLE_BANGUMI_ANIME_EPISODE = (
@@ -52,7 +52,7 @@ CREATE_TABLE_BANGUMI_ANIME_EPISODE = (
 	'	`desc`		LONGTEXT,'
 	'	PRIMARY KEY ( `eid` ),'
 	'	UNIQUE KEY ( `eid` )'
-	') ENGINE=InnoDB CHARSET=utf8'
+	') ENGINE=InnoDB CHARSET=utf8mb4'
 )
 
 CREATE_TABLE_REQUEST_FAILED = (
@@ -61,12 +61,12 @@ CREATE_TABLE_REQUEST_FAILED = (
 	'	`type`		VARCHAR(20) NOT NULL,'
 	'	`desc`		LONGTEXT,'
 	'	PRIMARY KEY ( `id`, `type` )'
-	') ENGINE=InnoDB CHARSET=utf8'
+	') ENGINE=InnoDB CHARSET=utf8mb4'
 )
 
 CREATE_TABLE_LOG = (
 	'CREATE TABLE IF NOT EXISTS `log` ('
 	'	`time`		VARCHAR(20) NOT NULL,'
 	'	`content`	LONGTEXT'
-	') ENGINE=InnoDB CHARSET=utf8'
+	') ENGINE=InnoDB CHARSET=utf8mb4'
 )
