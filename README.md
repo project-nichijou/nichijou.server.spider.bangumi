@@ -21,13 +21,6 @@
 - 数据爬取
 - 写入数据库
 
-如果阅读代码可以发现，我们对于大量难以处理的字段使用了直接写入`HTML`的方式，会在后续的流程中 (见[项目架构](https://github.com/project-nichijou/intro)) 进行处理。这样做的原因在于：
-
-1. 提高爬虫速度 (毕竟服务器是小水管 1C2G)
-2. 降低在爬取阶段的报错、解析失败、写入失败频率
-3. 有利于提高整体工作的稳定性，方便调试
-4. 降低数据库复杂度，方便维护
-
 ## 关于爬虫
 
 本项目实现了如下Spider:
@@ -50,7 +43,7 @@
     - 站内排名
     - 剧集详细信息
   - `bangumi_anime_scrape`: 爬取网页上的番剧信息 `/subject/<sid>`
-      - 所有属性列表 (HTML)
+      - 所有属性列表
       - 标签 (空格隔开)
       - 种类 (TV, OVA, ...)
 
@@ -231,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `bangumi_anime` (
 	`eps_count`	INT,					# 话数
 	`date`		VARCHAR(200),			# 放送开始日期
 	`weekday`	INT,					# 放送星期
-	`metaHTML`	LONGTEXT,				# 所有属性列表 (HTML)
+	`meta`		LONGTEXT,				# 所有属性列表
 	`tags`		LONGTEXT,				# 标签, 空格隔开
 	`type`		VARCHAR(10),			# 种类: TV, OVA, ...
 	`image`		LONGTEXT,				# 封面图, large > common > medium > small > grid

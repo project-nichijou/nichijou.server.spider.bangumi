@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from scrapy.http.cookies import CookieJar
 from bangumi.tools import bangumi_cookies
 from bangumi.items.bangumi_anime_name import BangumiAnimeNameItem
@@ -62,7 +63,12 @@ class BangumiAnimeScrapeSpider(scrapy.Spider):
 		### scraping section
 		try:
 			# meta HTML <ul id="infobox">
-			result['metaHTML'] = scrapy.Selector(response=response).xpath('//*[@id="infobox"]').get()
+			# result['metaHTML'] = scrapy.Selector(response=response).xpath('//*[@id="infobox"]').get()
+			soup = BeautifulSoup(scrapy.Selector(response=response).xpath('//*[@id="infobox"]').get(), 'lxml')
+			meta = []
+			for item in soup.findAll('li'):
+				meta.append(item.getText())
+			result['meta'] = '\n'.join(meta)
 			# detailed info
 			for item in scrapy.Selector(response=response).xpath('//*[@id="infobox"]/li'):
 				# [:-2] 去掉末尾的 `: `

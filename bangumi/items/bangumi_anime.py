@@ -26,7 +26,9 @@ class BangumiAnimeItem(scrapy.Item):
 
 	### 私有爬取	
 	# 所有属性列表 (HTML)
-	metaHTML = scrapy.Field()
+	# metaHTML = scrapy.Field()
+	# 所有属性列表
+	meta = scrapy.Field()
 	# 标签, 空格隔开
 	tags = scrapy.Field()
 	# 种类: TV, OVA, ...

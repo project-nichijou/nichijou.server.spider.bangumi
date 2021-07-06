@@ -19,7 +19,7 @@ CREATE_TABLE_BANGUMI_ANIME = (
 	'	`eps_count`	INT,'
 	'	`date`		VARCHAR(200),'
 	'	`weekday`	INT,'
-	'	`metaHTML`	LONGTEXT,'
+	'	`meta`		LONGTEXT,'
 	'	`tags`		LONGTEXT,'
 	'	`type`		VARCHAR(10),'
 	'	`image`		LONGTEXT,'
