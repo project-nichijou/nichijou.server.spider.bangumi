@@ -141,7 +141,7 @@ scrapy crawl bangumi_anime -a fail=off
 
 - 主命令
 	```
-	python3 main.py 
+	$ python3 main.py 
 	Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
 	Options:
@@ -155,7 +155,7 @@ scrapy crawl bangumi_anime -a fail=off
 	```
 - `crawl`
 	```
-	python3 main.py crawl --help
+	$ python3 main.py crawl --help
 	Usage: main.py crawl [OPTIONS] SPIDER
 
 	start SPIDER crawling using scrapy
@@ -163,16 +163,19 @@ scrapy crawl bangumi_anime -a fail=off
 	SPIDER: name of the spider to start
 
 	Options:
-	--fail INTEGER  time of retrying for failed items. default is 0, when the
-					value is negative, retrying won't stop unless the table
-					`request_failed` is empty. Note: this parameter is not
-					available for all spiders, only for `bangumi_anime_api`,
-					`bangumi_anime_scrape`.
-	--help          Show this message and exit.
+	-f, --fail INTEGER       time of retrying for failed items. default is 0,
+							when the value is negative, retrying won't stop
+							unless the table `request_failed` is empty. Note:
+							this parameter is not available for all spiders,
+							only for `bangumi_anime_api`,
+							`bangumi_anime_scrape`.
+	-F, --only-fail BOOLEAN  whether only crawl for the failed cases or crawl
+							the whole target
+	--help                   Show this message and exit.
 	```
 - `dellog`
 	```
-	python3 main.py dellog --help
+	$ python3 main.py dellog --help
 	Usage: main.py dellog [OPTIONS]
 
 	delete loggings in the database.
@@ -185,7 +188,7 @@ scrapy crawl bangumi_anime -a fail=off
 	```
 - `setcookies`
 	```
-	python3 main.py setcookies --help
+	$ python3 main.py setcookies --help
 	Usage: main.py setcookies [OPTIONS] COOKIES
 
 	set cookies of bangumi
