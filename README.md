@@ -3,17 +3,17 @@
 本项目作为项目[Project Nichijou](https://github.com/project-nichijou)中的子项目，是[Bangumi 番组计划](bgm.tv)的爬虫，用于构建番剧数据库。完整内容详见: https://github.com/project-nichijou/intro
 
 - [0x00 Bangumi Spider [Project Nichijou]](#0x00-bangumi-spider-project-nichijou)
-	- [思路与流程](#思路与流程)
-	- [关于爬虫](#关于爬虫)
-	- [环境](#环境)
-	- [配置方法](#配置方法)
-	- [使用方法](#使用方法)
-	- [关于数据库](#关于数据库)
-	- [关于脚本](#关于脚本)
-	- [关于时长](#关于时长)
-	- [一些其他奇奇怪怪的点](#一些其他奇奇怪怪的点)
-	- [TODO](#todo)
-	- [Change log](#change-log)
+  - [思路与流程](#思路与流程)
+  - [关于爬虫](#关于爬虫)
+  - [环境](#环境)
+  - [配置方法](#配置方法)
+  - [使用方法](#使用方法)
+  - [关于数据库](#关于数据库)
+  - [关于脚本](#关于脚本)
+  - [关于时长](#关于时长)
+  - [一些其他奇奇怪怪的点](#一些其他奇奇怪怪的点)
+  - [TODO](#todo)
+  - [Change log](#change-log)
 
 ## 思路与流程
 
@@ -43,9 +43,9 @@
     - 站内排名
     - 剧集详细信息
   - `bangumi_anime_scrape`: 爬取网页上的番剧信息 `/subject/<sid>`
-      - 所有属性列表
-      - 标签 (空格隔开)
-      - 种类 (TV, OVA, ...)
+    - 所有属性列表
+    - 标签 (空格隔开)
+    - 种类 (TV, OVA, ...)
 
 因为主项目的性质，故主要精力集中在番剧上面，如果您有其他需要可以自行实现 (欢迎提交PR！)
 
@@ -79,9 +79,9 @@ pip3 install -r requirements.txt
 
 ```
 {
-	"chii_auth": <value>,
-	"chii_sec_id": <value>,
-	"chii_sid": <value>
+    "chii_auth": <value>,
+    "chii_sec_id": <value>,
+    "chii_sid": <value>
 }
 ```
 
@@ -93,21 +93,21 @@ pip3 install -r requirements.txt
 
 ```json
 [
-	{
-		"domain": ".bgm.tv",
-		"expirationDate": 1627660426.06073,
-		"hostOnly": false,
-		"httpOnly": false,
-		"name": "chii_auth",
-		"path": "/",
-		"sameSite": "unspecified",
-		"secure": false,
-		"session": false,
-		"storeId": "0",
-		"value": "<value>",
-		"id": 1
-	},
-	// 略...
+    {
+        "domain": ".bgm.tv",
+        "expirationDate": 1627660426.06073,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "chii_auth",
+        "path": "/",
+        "sameSite": "unspecified",
+        "secure": false,
+        "session": false,
+        "storeId": "0",
+        "value": "<value>",
+        "id": 1
+    },
+    // 略...
 ]
 ```
 
@@ -140,64 +140,64 @@ scrapy crawl bangumi_anime -a fail=off
 或者也可以使用CLI命令：
 
 - 主命令
-	```
-	$ python3 main.py 
-	Usage: main.py [OPTIONS] COMMAND [ARGS]...
+    ```
+    $ python3 main.py 
+    Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
-	Options:
-	--help  Show this message and exit.
+    Options:
+    --help  Show this message and exit.
 
-	Commands:
-	crawl       start SPIDER crawling using scrapy
-	dellog      delete loggings in the database.
-	initdb      init bangumi database
-	setcookies  set cookies of bangumi
-	```
+    Commands:
+    crawl       start SPIDER crawling using scrapy
+    dellog      delete loggings in the database.
+    initdb      init bangumi database
+    setcookies  set cookies of bangumi
+    ```
 - `crawl`
-	```
-	$ python3 main.py crawl --help
-	Usage: main.py crawl [OPTIONS] SPIDER
+    ```
+    $ python3 main.py crawl --help
+    Usage: main.py crawl [OPTIONS] SPIDER
 
-	start SPIDER crawling using scrapy
+    start SPIDER crawling using scrapy
 
-	SPIDER: name of the spider to start
+    SPIDER: name of the spider to start
 
-	Options:
-	-f, --fail INTEGER       time of retrying for failed items. default is 0,
-							when the value is negative, retrying won't stop
-							unless the table `request_failed` is empty. Note:
-							this parameter is not available for all spiders,
-							only for `bangumi_anime_api`,
-							`bangumi_anime_scrape`.
-	-F, --only-fail BOOLEAN  whether only crawl for the failed cases or crawl
-							the whole target
-	--help                   Show this message and exit.
-	```
+    Options:
+    -f, --fail INTEGER       time of retrying for failed items. default is 0,
+                             when the value is negative, retrying won't stop
+                             unless the table `request_failed` is empty. Note:
+                             this parameter is not available for all spiders,
+                             only for `bangumi_anime_api`,
+                             `bangumi_anime_scrape`.
+    -F, --only-fail BOOLEAN  whether only crawl for the failed cases or crawl
+                             the whole target
+    --help                   Show this message and exit.
+    ```
 - `dellog`
-	```
-	$ python3 main.py dellog --help
-	Usage: main.py dellog [OPTIONS]
+    ```
+    $ python3 main.py dellog --help
+    Usage: main.py dellog [OPTIONS]
 
-	delete loggings in the database.
+    delete loggings in the database.
 
-	Options:
-	--before TEXT  delete the loggings which are before the time in the   
-					database. default is None, which means delete all. data
-					format: YYYY-MM-DD hh:mm:ss
-	--help         Show this message and exit.
-	```
+    Options:
+    --before TEXT  delete the loggings which are before the time in the   
+                   database. default is None, which means delete all. data
+                   format: YYYY-MM-DD hh:mm:ss
+    --help         Show this message and exit.
+    ```
 - `setcookies`
-	```
-	$ python3 main.py setcookies --help
-	Usage: main.py setcookies [OPTIONS] COOKIES
+    ```
+    $ python3 main.py setcookies --help
+    Usage: main.py setcookies [OPTIONS] COOKIES
 
-	set cookies of bangumi
+    set cookies of bangumi
 
-	COOKIES: dictionary of cookies (converted to str)
+    COOKIES: dictionary of cookies (converted to str)
 
-	Options:
-	--help  Show this message and exit.
-	```
+    Options:
+    --help  Show this message and exit.
+    ```
 
 ## 关于数据库
 
@@ -209,74 +209,74 @@ scrapy crawl bangumi_anime -a fail=off
 
 ```sql
 CREATE TABLE IF NOT EXISTS `bangumi_id` (
-	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
-	`type`		VARCHAR(10) NOT NULL,	# 种类: anime, book, etc.
-	`name`		VARCHAR(200) NOT NULL,	# 原名
-	`name_cn`	VARCHAR(200) NOT NULL,	# 中文名 (没有就是原名)
-	PRIMARY KEY ( `sid` ),
-	UNIQUE KEY ( `sid` )
+    `sid`       INT UNSIGNED NOT NULL,  # 条目ID
+    `type`      VARCHAR(10) NOT NULL,   # 种类: anime, book, etc.
+    `name`      VARCHAR(200) NOT NULL,  # 原名
+    `name_cn`   VARCHAR(200) NOT NULL,  # 中文名 (没有就是原名)
+    PRIMARY KEY ( `sid` ),
+    UNIQUE KEY ( `sid` )
 ) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
 CREATE TABLE IF NOT EXISTS `bangumi_anime` (
-	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
-	`name`		VARCHAR(200) NOT NULL,	# 原名
-	`name_cn`	VARCHAR(200) NOT NULL,	# 中文名 (没有就是原名)
-	`summary`	LONGTEXT,				# 简介
-	`eps_count`	INT,					# 话数
-	`date`		VARCHAR(200),			# 放送开始日期
-	`weekday`	INT,					# 放送星期
-	`meta`		LONGTEXT,				# 所有属性列表
-	`tags`		LONGTEXT,				# 标签, 空格隔开
-	`type`		VARCHAR(10),			# 种类: TV, OVA, ...
-	`image`		LONGTEXT,				# 封面图, large > common > medium > small > grid
-	`rating`	DECIMAL(32,28),			# 评分, rating.score
-	`rank`		INT,					# 站内排名
-	PRIMARY KEY ( `sid` ),
-	UNIQUE KEY ( `sid` )
+    `sid`       INT UNSIGNED NOT NULL,  # 条目ID
+    `name`      VARCHAR(200) NOT NULL,  # 原名
+    `name_cn`   VARCHAR(200) NOT NULL,  # 中文名 (没有就是原名)
+    `summary`   LONGTEXT,               # 简介
+    `eps_count` INT,                    # 话数
+    `date`      VARCHAR(200),           # 放送开始日期
+    `weekday`   INT,                    # 放送星期
+    `meta`      LONGTEXT,               # 所有属性列表
+    `tags`      LONGTEXT,               # 标签, 空格隔开
+    `type`      VARCHAR(10),            # 种类: TV, OVA, ...
+    `image`     LONGTEXT,               # 封面图, large > common > medium > small > grid
+    `rating`    DECIMAL(32,28),         # 评分, rating.score
+    `rank`      INT,                    # 站内排名
+    PRIMARY KEY ( `sid` ),
+    UNIQUE KEY ( `sid` )
 ) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
 CREATE TABLE IF NOT EXISTS `bangumi_anime_name` (
-	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
-	`name`		VARCHAR(200) NOT NULL,	# 名称
-	PRIMARY KEY ( `sid`, `name` )
+    `sid`       INT UNSIGNED NOT NULL,  # 条目ID
+    `name`      VARCHAR(200) NOT NULL,  # 名称
+    PRIMARY KEY ( `sid`, `name` )
 ) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
 CREATE TABLE IF NOT EXISTS `bangumi_anime_episode` (
-	`eid`		INT UNSIGNED NOT NULL,	# 剧集ID
-	`sid`		INT UNSIGNED NOT NULL,	# 条目ID
-	`name`		VARCHAR(200) NOT NULL,	# 剧集标题
-	`name_cn`	VARCHAR(200) NOT NULL,	# 中文标题 (没有就是标题)
-	# 类型: 本篇 0 / SP 1 / OP 2 / ED 3 / 预告,宣传,广告 4 / MAD 5 / 其他 6
-	`type`		INT UNSIGNED NOT NULL,
-	`sort`		INT UNSIGNED NOT NULL,	# 顺序 (当前type中的多少话)
-	`status`	VARCHAR(10) NOT NULL,	# 是否已放送 状态: Air / NA / Today
-	`duration`	VARCHAR(200) NOT NULL,	# 时常, e.g. 24m
-	`date`		VARCHAR(200) NOT NULL,	# 放送日期
-	`desc`		LONGTEXT,				# 简介
-	PRIMARY KEY ( `eid` ),
-	UNIQUE KEY ( `eid` )
+    `eid`       INT UNSIGNED NOT NULL,  # 剧集ID
+    `sid`       INT UNSIGNED NOT NULL,  # 条目ID
+    `name`      VARCHAR(200) NOT NULL,  # 剧集标题
+    `name_cn`   VARCHAR(200) NOT NULL,  # 中文标题 (没有就是标题)
+    # 类型: 本篇 0 / SP 1 / OP 2 / ED 3 / 预告,宣传,广告 4 / MAD 5 / 其他 6
+    `type`      INT UNSIGNED NOT NULL,
+    `sort`      INT UNSIGNED NOT NULL,  # 顺序 (当前type中的多少话)
+    `status`    VARCHAR(10) NOT NULL,   # 是否已放送 状态: Air / NA / Today
+    `duration`  VARCHAR(200) NOT NULL,  # 时常, e.g. 24m
+    `date`      VARCHAR(200) NOT NULL,  # 放送日期
+    `desc`      LONGTEXT,               # 简介
+    PRIMARY KEY ( `eid` ),
+    UNIQUE KEY ( `eid` )
 ) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
 CREATE TABLE IF NOT EXISTS `request_failed` (
-	`id`		INT UNSIGNED NOT NULL,	# 失败ID
-	`type`		VARCHAR(20) NOT NULL,	# 失败种类
-	`desc`		LONGTEXT,				# 失败信息
-	PRIMARY KEY ( `id`, `type` )
+    `id`        INT UNSIGNED NOT NULL,  # 失败ID
+    `type`      VARCHAR(20) NOT NULL,   # 失败种类
+    `desc`      LONGTEXT,               # 失败信息
+    PRIMARY KEY ( `id`, `type` )
 ) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
 ```sql
 CREATE TABLE IF NOT EXISTS `log` (
-	`time`		VARCHAR(20) NOT NULL,	# 日志时间
-	`content`	LONGTEXT				# 日志内容
+    `time`      VARCHAR(20) NOT NULL,   # 日志时间
+    `content`   LONGTEXT                # 日志内容
 ) ENGINE=InnoDB CHARSET=utf8mb4
 ```
 
