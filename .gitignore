@@ -1,8 +1,5 @@
 # custom
 .vscode/
-database_settings.py
-cookies.json
-cookies.json.backup
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

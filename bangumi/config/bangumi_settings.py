@@ -48,22 +48,4 @@ if API_SPIDER_MODE == SpiderMode.ORIGIN:
 if API_SPIDER_MODE == SpiderMode.MIRROR:
 	BASE_API_URL = f'{SPIDER_PROTOCOL.value}{MIRROR_API_DOMAIN}'
 
-HEADERS = {
-	'Connection': 'keep-alive',
-	'Cache-Control': 'max-age=0',
-	'sec-ch-ua': '" Not;A Brand";v="99", "Microsoft Edge";v="91", "Chromium";v="91"',
-	'sec-ch-ua-mobile': '?0',
-	'Upgrade-Insecure-Requests': '1',
-	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59',
-	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-	'Sec-Fetch-Site': 'none',
-	'Sec-Fetch-Mode': 'navigate',
-	'Sec-Fetch-User': '?1',
-	'Sec-Fetch-Dest': 'document',
-	'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6'
-}
-
-# whether update the cookies automatically from Cookie-Set
-COOKIES_AUTO_UPDATE = True
-
 START_INFO = ['放送开始', '上映年度', '开始']
