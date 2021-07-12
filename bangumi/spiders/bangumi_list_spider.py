@@ -1,3 +1,5 @@
+from logging import exception
+from bangumi.database.bangumi_database import BangumiDatabase
 from common.utils.logger import format_log
 from common.utils.datetime import get_time_str_now
 from common.items.log_item import CommonLogItem
@@ -28,28 +30,45 @@ class BangumiListSpider(CommonSpider):
 	sid_list = []
 
 
-	def __init__(self, **kwargs):
-		'''
-		initializer for spider
-		'''
+	def initialize(self):
 		self.page_var = self.start_page
 		self.get_last_page()
+
+
+	def init_normal_datasource(self):
 		if self.last_page:
 			self.start_values = [
 				{'url': self.get_url(page=pg), 'page': pg} for pg in range(1, self.last_page + 1)
 			]
 		else: self.start_values = [{'url': self.get_url(), 'page': self.page_var}]
-		super().__init__(**kwargs)
+
+
+	def init_fail_datasource(self):
+		self.start_values = []
+		failed_items = BangumiDatabase().read_fail(self.name)
+		for failed_item in failed_items:
+			url = str(failed_item['url'])
+			page = int(url.split('=')[-1])
+			self.start_values.append({'url': url, 'page': page})
 
 
 	def get_last_page(self):
 		'''
 		get the number of last page to confirm scrape range
 		'''
-		cur_url = self.get_url()
-		first_page_html = requests.get(cur_url, headers=common_settings.HEADERS).content.decode('utf-8')
-		self.last_page = int(re.findall('page=[0-9][0-9]*', first_page_html)[-1][5:])
-		print("last_page:", self.last_page)
+		try:
+			cur_url = self.get_url()
+			first_page_html = requests.get(cur_url, headers=common_settings.HEADERS).content.decode('utf-8')
+			self.last_page = int(re.findall('page=[0-9][0-9]*', first_page_html)[-1][5:])
+			print("last_page:", self.last_page)
+		except Exception as e:
+			BangumiDatabase().log(
+				format_log(
+					'exception caught when getting last page in `bangumi_list`',
+					exception = e,
+					traceback = traceback.format_exc()
+				)
+			)
 
 
 	def get_url(self, page=None, type=None):
@@ -85,6 +104,7 @@ class BangumiListSpider(CommonSpider):
 		# if not empty, yeild results
 		for item in item_list:
 			result = BangumiIDItem()
+			result._url = response.url
 			try:
 				result['sid'] = int(item.attrib['id'][5:])	# get rid of the prefix `item_`
 				result['type'] = self.type
