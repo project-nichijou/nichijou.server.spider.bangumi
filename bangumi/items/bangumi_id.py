@@ -1,7 +1,13 @@
+from common.items.common_item import CommonItem
 import scrapy
 
 
-class BangumiIDItem(scrapy.Item):
+class BangumiIDItem(CommonItem):
+
+	table = 'bangumi_id'
+
+	primary_keys = ['sid']
+
 	# subject id
 	sid = scrapy.Field()
 	# type of subject
