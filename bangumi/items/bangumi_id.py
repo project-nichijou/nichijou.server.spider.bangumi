@@ -8,6 +8,8 @@ class BangumiIDItem(CommonItem):
 
 	primary_keys = ['sid']
 
+	use_fail = True
+
 	# subject id
 	sid = scrapy.Field()
 	# type of subject
