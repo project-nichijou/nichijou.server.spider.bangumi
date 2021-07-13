@@ -3,7 +3,7 @@ from bangumi.database.bangumi_database import BangumiDatabase
 from common.utils.logger import format_log
 from common.utils.datetime import get_time_str_now
 from common.items.log_item import CommonLogItem
-from bangumi.items.bangumi_id import BangumiIDItem
+from bangumi.items.bangumi_id_item import BangumiIDItem
 from bangumi.config import bangumi_settings
 from common.spiders.common_spider import CommonSpider
 from common.config import settings as common_settings
