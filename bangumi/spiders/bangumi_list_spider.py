@@ -1,6 +1,6 @@
 from logging import exception
 from bangumi.database.bangumi_database import BangumiDatabase
-from common.utils.logger import format_log
+from common.utils.formatter import format_log
 from common.utils.datetime import get_time_str_now
 from common.items.log_item import CommonLogItem
 from bangumi.items.bangumi_id_item import BangumiIDItem
@@ -12,6 +12,7 @@ import re
 import requests
 import scrapy
 import traceback
+import json
 
 
 class BangumiListSpider(CommonSpider):
@@ -48,7 +49,7 @@ class BangumiListSpider(CommonSpider):
 		failed_items = BangumiDatabase().read_fail(self.name)
 		for failed_item in failed_items:
 			url = str(failed_item['url'])
-			page = int(url.split('=')[-1])
+			page = int(json.loads(failed_item['params'])['page'])
 			self.start_values.append({'url': url, 'page': page})
 
 
