@@ -1,7 +1,6 @@
-import subprocess
-from bangumi.tools import bangumi_cookies
 from bangumi.database.bangumi_database import BangumiDatabase
-from bangumi.database import database_settings
+from common.cookies.cookies_io import write_cookies
+import subprocess
 import click
 import json
 
@@ -29,29 +28,9 @@ def crawl(spider: str, fail: int, only_fail: bool):
 	if fail > 0:
 		for _ in range(0, fail): subprocess.call(command.split(' '))
 	elif fail < 0:
-		db = BangumiDatabase(database_settings.CONFIG)
-		type_list = []
-		if spider == 'bangumi_anime_api':
-			type_list = ['anime_api', 'episode']
-		if spider == 'bangumi_anime_list':
-			type_list = ['id']
-		if spider == 'bangumi_anime_scrape':
-			type_list = ['anime_scrape']
-		if spider == 'bangumi_book_list':
-			type_list = ['id']
-		if spider == 'bangumi_game_list':
-			type_list = ['id']
-		if spider == 'bangumi_music_list':
-			type_list = ['id']
-		if spider == 'bangumi_real_list':
-			type_list = ['id']
-		flag = True
-		while flag:
+		db = BangumiDatabase()
+		while len(db.read_fail(spider)) > 0:
 			subprocess.call(command.split(' '))
-			flag = False
-			for type in type_list:
-				if db.read_fail_list(type=type) != []:
-					flag = True
 
 
 @cli.command()
@@ -60,11 +39,8 @@ def dellog(before: str):
 	'''
 	delete loggings in the database.
 	'''
-	db = BangumiDatabase(database_settings.CONFIG)
-	if before == None:
-		db.del_log_all()
-	else:
-		db.del_log_till(before)
+	db = BangumiDatabase()
+	db.delete_log(before)
 
 
 @cli.command()
@@ -75,7 +51,7 @@ def setcookies(cookies: str):
 
 	COOKIES: dictionary of cookies (converted to str)
 	'''
-	bangumi_cookies.write_cookies(json.loads(cookies))
+	write_cookies(json.loads(cookies))
 
 
 @cli.command()
@@ -83,7 +59,7 @@ def initdb():
 	'''
 	init bangumi database
 	'''
-	BangumiDatabase(database_settings.CONFIG)
+	BangumiDatabase()
 
 
 if __name__ == '__main__':
