@@ -55,7 +55,7 @@ class BangumiAnimeAPISpider(CommonSpider):
 		result._url = url
 		id = format_id(sid)
 		
-		result['id'] = sid
+		result['id'] = id
 		result['url'] = url
 		
 		result_fail = CommonFailedRequestItem(
@@ -130,6 +130,11 @@ class BangumiAnimeAPISpider(CommonSpider):
 			else: result['rating'] = api_res.get('rating').get('score')
 
 			result['rank'] = api_res.get('rank')
+
+			# clear null
+			for key in dict(result).keys():
+				if is_null(dict(result)[key]):
+					del result[key]
 
 			yield result
 		except Exception as e:
