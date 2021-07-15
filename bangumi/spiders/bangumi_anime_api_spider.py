@@ -3,7 +3,8 @@ from bangumi.items.bangumi_episode_item import BangumiEpisodeItem
 from bangumi.items.bangumi_anime_name_item import BangumiAnimeNameItem
 from common.utils.checker import is_not_null, is_null
 import traceback
-from common.utils.formatter import format_airing_status, format_date, format_duration, format_episode_type, format_id, format_int, format_log, format_weekday
+from common.utils.formatter import format_airing_status, format_date, format_duration, format_episode_type, format_id, format_int, format_weekday
+from common.utils.logger import format_log
 from common.utils.hash import get_md5
 from common.items.fail_request_item import CommonFailedRequestItem
 import json

@@ -7,7 +7,8 @@ from common.utils.checker import is_not_null, is_null
 import scrapy
 from common.utils.hash import get_md5
 from common.items.fail_request_item import CommonFailedRequestItem
-from common.utils.formatter import format_date, format_id, format_int, format_log
+from common.utils.formatter import format_date, format_id, format_int
+from common.utils.logger import format_log
 from bangumi.items.bangumi_anime_item import BangumiAnimeScrapeItem
 import json
 from bangumi.database.bangumi_database import BangumiDatabase

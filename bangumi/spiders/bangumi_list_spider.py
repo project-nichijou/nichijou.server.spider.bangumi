@@ -1,6 +1,6 @@
 from logging import exception
 from bangumi.database.bangumi_database import BangumiDatabase
-from common.utils.formatter import format_log
+from common.utils.logger import format_log
 from common.utils.datetime import get_time_str_now
 from common.items.log_item import CommonLogItem
 from bangumi.items.bangumi_id_item import BangumiIDItem

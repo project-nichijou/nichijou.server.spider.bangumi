@@ -1,10 +1,7 @@
 from common.database.database import CommonDatabase
 from bangumi.database import bangumi_database_command as db_commands
 import traceback
-import mysql.connector
-import copy
 
-from mysql.connector import cursor
 
 class BangumiDatabase(CommonDatabase):
 	
