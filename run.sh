@@ -21,8 +21,8 @@ cd $DIR
 
 ### run spiders
 python3 main.py crawl bangumi_anime_list
-python3 main.py crawl bangumi_anime_api --fail=2
 python3 main.py crawl bangumi_anime_scrape --fail=2
+python3 main.py crawl bangumi_anime_api --fail=2
 
 ### go back to the original directory
 cd $CURRENT_DIR
