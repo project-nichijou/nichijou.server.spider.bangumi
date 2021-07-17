@@ -54,6 +54,7 @@ ROBOTSTXT_OBEY = False # Because we need to crawl the mirror sites (they are usi
 DOWNLOADER_MIDDLEWARES = {
 	'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': None,
     'common.middlewares.cookie_middleware.CommonCookiesMiddleware': 920,
+	'common.middlewares.cache_middleware.CommonCacheMiddleware': 930,
 }
 
 # Enable or disable extensions
