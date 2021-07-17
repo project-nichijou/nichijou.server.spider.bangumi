@@ -1,4 +1,5 @@
-from logging import exception
+from common.utils.checker import is_not_null
+from common.cache.cache_maker import make_cache_item
 from bangumi.database.bangumi_database import BangumiDatabase
 from common.utils.logger import format_log
 from common.utils.datetime import get_time_str_now
@@ -90,6 +91,27 @@ class BangumiListSpider(CommonSpider):
 
 
 	def parse(self, response, page):
+
+		# cache part
+		try:
+			cache_item = make_cache_item(response, 24 * 3600)
+			if is_not_null(cache_item):
+				yield cache_item
+		except Exception as e:
+			yield CommonLogItem(
+				time = get_time_str_now(),
+				content = format_log(
+					info = 'cache failed.',
+					exception = e,
+					traceback = traceback.format_exc(),
+					values = {
+						'spider': self.name,
+						'response': response.__dict__,
+						'page': page
+					}
+				)
+			)
+
 		# Update cookies
 		# cookies = response.headers.getlist('Set-Cookie')
 		# bangumi_cookies.update_cookies(cookies)

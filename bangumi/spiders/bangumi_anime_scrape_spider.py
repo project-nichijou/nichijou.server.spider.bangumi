@@ -1,3 +1,6 @@
+from common.items.log_item import CommonLogItem
+from common.cache.cache_maker import make_cache_item
+from common.utils.datetime import get_date_str_now, get_time_str_now
 from bangumi.items.bangumi_anime_name_item import BangumiAnimeNameItem
 from common.utils.ac import ACAutomaton
 import traceback
@@ -136,3 +139,31 @@ class BangumiAnimeScrapeSpider(CommonSpider):
 			)
 			yield result_fail
 			return
+
+		# cache part
+		try:
+			# 十年前的数据就设个缓存
+			today = get_date_str_now()
+			ten_years_ago = int(today[:4]) - 10
+			target_date = f'{ten_years_ago}{today[4:]}'
+			# 判断数据有效性
+			if 'date' in result.keys():
+				if is_not_null(result['date']) and result['date'] < target_date:
+					# 缓存时间为一个月
+					cache_item = make_cache_item(response, 24 * 3600 * 30)
+					if is_not_null(cache_item):
+						yield cache_item
+		except Exception as e:
+			yield CommonLogItem(
+				time = get_time_str_now(),
+				content = format_log(
+					info = 'cache failed.',
+					exception = e,
+					traceback = traceback.format_exc(),
+					values = {
+						'spider': self.name,
+						'response': response.__dict__,
+						'sid': sid
+					}
+				)
+			)
