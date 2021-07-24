@@ -104,7 +104,7 @@ class BangumiAnimeScrapeSpider(CommonSpider):
 				except: continue
 				if is_null(raw): continue
 
-				if ACAutomaton(['别名']).match(str(info_title)):
+				if ACAutomaton(['别名', '中文名']).match(str(info_title)):
 					yield BangumiAnimeNameItem(
 						id = id,
 						name = raw
